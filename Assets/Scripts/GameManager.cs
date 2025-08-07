@@ -19,13 +19,36 @@ public class GameManager : MonoBehaviour
         _instance = this;
     }
 
+
+    private int _waveLevel;
+    private int _enemyCount;
+
+    void Start()
+    {
+        _waveLevel = 0;
+        _enemyCount = 0;
+        UIManager.Instance.UpdateUIElements();
+    }
+
     public void PauseTheGame()
     {
-        
+        Debug.Log("Game Paused");
     }
 
     public void EnemyGotDestroyed()
     {
-        Debug.Log("Enemy got killed");
+        _enemyCount--;
+        UIManager.Instance.UpdateUIElements();
+    }
+
+    public void EnemyGotSpawned()
+    {
+        _enemyCount++;
+        UIManager.Instance.UpdateUIElements();
+    }
+
+    public int GetEnemyCount()
+    {
+        return _enemyCount;
     }
 }

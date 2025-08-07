@@ -24,9 +24,7 @@ public class InputManager : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
-                    GameManager.Instance.EnemyGotDestroyed();
                     hit.collider.gameObject.GetComponent<Enemy>().GotKilled();
-
                 }
             }
         }

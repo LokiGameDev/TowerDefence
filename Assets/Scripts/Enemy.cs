@@ -9,9 +9,16 @@ public class Enemy : MonoBehaviour
     {
         _speed = 2f;
     }
+
     void OnEnable()
     {
+        GameManager.Instance.EnemyGotSpawned();
         _playerTower = GameObject.Find("PlayerTower");
+    }
+
+    void OnDisable()
+    {
+        GameManager.Instance.EnemyGotDestroyed();
     }
 
     void Update()
