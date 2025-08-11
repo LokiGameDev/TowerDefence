@@ -12,13 +12,7 @@ public class Enemy : MonoBehaviour
 
     void OnEnable()
     {
-        GameManager.Instance.EnemyGotSpawned();
         _playerTower = GameObject.Find("PlayerTower");
-    }
-
-    void OnDisable()
-    {
-        GameManager.Instance.EnemyGotDestroyed();
     }
 
     void Update()
@@ -30,10 +24,12 @@ public class Enemy : MonoBehaviour
     public void DamagedTheTower()
     {
         EnemyPool.Instance.ReturnToPool(this);
+        GameManager.Instance.EnemyGotDestroyed(false);
     }
 
     public void GotKilled()
     {
         EnemyPool.Instance.ReturnToPool(this);
+        GameManager.Instance.EnemyGotDestroyed(true);
     }
 }

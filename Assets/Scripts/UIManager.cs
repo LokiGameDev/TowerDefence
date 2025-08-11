@@ -23,9 +23,29 @@ public class UIManager : MonoBehaviour
 
 
     public Text enemyCount;
+    public Text playerScore;
+    public Text waveLevel;
+    public GameObject gameOverPanel;
+
+    void Start()
+    {
+        gameOverPanel.SetActive(false);
+    }
 
     public void UpdateUIElements()
     {
-        if(enemyCount!=null) enemyCount.text = "" + GameManager.Instance.GetEnemyCount();
+        if (enemyCount != null) enemyCount.text = "" + GameManager.Instance._enemyCount;
+        if (playerScore != null) playerScore.text = "" + GameManager.Instance._playerScore;
+        if (waveLevel != null) waveLevel.text = "" + GameManager.Instance._waveLevel;
+    }
+
+    public void GameOver()
+    {
+        gameOverPanel.SetActive(true);
+    }
+
+    public void RestartButton()
+    {
+        GameManager.Instance.RestartGame();
     }
 }

@@ -1,15 +1,13 @@
-using System.Collections;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     public Camera mainCamera;
 
-    private bool _canSpawnEnemy;
 
     void Start()
     {
-        _canSpawnEnemy = true;
+        
     }
 
     void Update()
@@ -29,19 +27,9 @@ public class InputManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && _canSpawnEnemy)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            var enemy = EnemyPool.Instance.Get();
-            enemy.gameObject.transform.position = new Vector3(10, 0.5f, 0);
-            enemy.gameObject.SetActive(true);
-            _canSpawnEnemy = false;
-            StartCoroutine(SpawnTimeInterval());
+            GameManager.Instance.SpawnTheNextWave();
         }
-    }
-
-    IEnumerator SpawnTimeInterval()
-    {
-        yield return new WaitForSeconds(1);
-        _canSpawnEnemy = true;
     }
 }

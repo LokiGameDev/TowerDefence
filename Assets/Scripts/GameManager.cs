@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,24 +21,30 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private int _waveLevel;
-    private int _enemyCount;
+    public int _waveLevel { get; private set; }
+    public int _enemyCount { get; private set; }
+    public int _playerScore { get; private set; }
+    public SpawnManager spawnManager;
 
     void Start()
     {
-        _waveLevel = 0;
+        _waveLevel = 1;
         _enemyCount = 0;
+        _playerScore = 0;
+        spawnManager.StartTheSpawn(_waveLevel);
         UIManager.Instance.UpdateUIElements();
     }
 
-    public void PauseTheGame()
+    public void GameOver()
     {
-        Debug.Log("Game Paused");
+        Debug.Log("Game Over");
+        UIManager.Instance.GameOver();
     }
 
-    public void EnemyGotDestroyed()
+    public void EnemyGotDestroyed(bool gotKilled)
     {
         _enemyCount--;
+        if (gotKilled) _playerScore++;
         UIManager.Instance.UpdateUIElements();
     }
 
@@ -47,8 +54,17 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateUIElements();
     }
 
-    public int GetEnemyCount()
+    public void SpawnTheNextWave()
     {
-        return _enemyCount;
+        if (_enemyCount <= 0)
+        {
+            _waveLevel++;
+            spawnManager.StartTheSpawn(_waveLevel);
+        }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }
