@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour
     public int _waveLevel { get; private set; }
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
+    private float spawnWaveWaitTime;
+    private float currentTime;
+    private bool spawnWaveInterval;
     public SpawnManager spawnManager;
 
     void Start()
@@ -31,8 +35,20 @@ public class GameManager : MonoBehaviour
         _waveLevel = 1;
         _enemyCount = 0;
         _playerScore = 0;
+        spawnWaveWaitTime = 10;
+        spawnWaveInterval = false;
         spawnManager.StartTheSpawn(_waveLevel);
         UIManager.Instance.UpdateUIElements();
+        UIManager.Instance.UpdateWaveBar(false);
+    }
+
+    void Update()
+    {
+        if (spawnWaveInterval)
+        {
+            UIManager.Instance.UpdateWaveBar(currentTime / spawnWaveWaitTime);
+            currentTime += Time.deltaTime;
+        }
     }
 
     public void GameOver()
@@ -44,6 +60,11 @@ public class GameManager : MonoBehaviour
     public void EnemyGotDestroyed(bool gotKilled)
     {
         _enemyCount--;
+        if (_enemyCount <= 0)
+        {
+            currentTime = 0;
+            StartCoroutine(SpawnWaveIntervalTime());
+        }
         if (gotKilled) _playerScore++;
         UIManager.Instance.UpdateUIElements();
     }
@@ -66,5 +87,20 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
+    }
+
+    IEnumerator SpawnWaveIntervalTime()
+    {
+        spawnWaveInterval = true;
+        UIManager.Instance.UpdateWaveBar(true);
+        yield return new WaitForSeconds(spawnWaveWaitTime);
+        spawnWaveInterval = false;
+        UIManager.Instance.UpdateWaveBar(false);
+        SpawnTheNextWave();
+    }
+
+    public void GamePauseStatus(bool status)
+    {
+        Time.timeScale = status ? 1 : 0;
     }
 }

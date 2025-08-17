@@ -4,15 +4,9 @@ public class InputManager : MonoBehaviour
 {
     public Camera mainCamera;
 
-
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !UIManager.Instance.upgradePanelOpen)
         {
             Vector3 mousePosition = Input.mousePosition;
 
@@ -24,12 +18,11 @@ public class InputManager : MonoBehaviour
                 {
                     hit.collider.gameObject.GetComponent<Enemy>().GotKilled();
                 }
+                if (hit.collider.gameObject.CompareTag("PlayerTower"))
+                {
+                    UIManager.Instance.TowerUpgradePanel(true);
+                }
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            GameManager.Instance.SpawnTheNextWave();
         }
     }
 }
