@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private float currentTime;
     private bool spawnWaveInterval;
     public SpawnManager spawnManager;
+    public bool _attackAbility { get; private set; }
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
         spawnWaveWaitTime = 10;
         spawnWaveInterval = false;
         spawnManager.StartTheSpawn(_waveLevel);
+        _attackAbility = false;
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.UpdateWaveBar(false);
     }
@@ -102,5 +104,22 @@ public class GameManager : MonoBehaviour
     public void GamePauseStatus(bool status)
     {
         Time.timeScale = status ? 1 : 0;
+    }
+
+    public void Purchasing(int value)
+    {
+        _playerScore -= value;
+        UIManager.Instance.UpdateUIElements();
+    }
+
+    public void UnlockAttackAbility()
+    {
+        _attackAbility = true;
+    }
+
+    public void AddScore(int score)
+    {
+        _playerScore += score;
+        UIManager.Instance.UpdateUIElements();
     }
 }

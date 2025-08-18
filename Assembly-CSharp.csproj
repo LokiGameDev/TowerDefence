@@ -65,12 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\TowerBullet.cs" />
     <Compile Include="Assets\Scripts\EnemyPool.cs" />
     <Compile Include="Assets\Scripts\InputManager.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\PlayerTower.cs" />
+    <Compile Include="Assets\Scripts\TowerShooter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

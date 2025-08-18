@@ -18,11 +18,11 @@ public class InputManager : MonoBehaviour
                 {
                     hit.collider.gameObject.GetComponent<Enemy>().GotKilled();
                 }
-                if (hit.collider.gameObject.CompareTag("PlayerTower"))
-                {
-                    UIManager.Instance.TowerUpgradePanel(true);
-                }
             }
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            GameManager.Instance.AddScore(10);
         }
     }
 }

@@ -30,12 +30,14 @@ public class UIManager : MonoBehaviour
     public Image waveBar;
     public GameObject towerUpgradePanel;
     public bool upgradePanelOpen;
+    public GameObject abilityLock;
 
     void Start()
     {
         gameOverPanel.SetActive(false);
         towerUpgradePanel.SetActive(false);
         upgradePanelOpen = false;
+        abilityLock.SetActive(true);
     }
 
     public void UpdateUIElements()
@@ -70,6 +72,11 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.RestartGame();
     }
 
+    public void UpgradeButton()
+    {
+        TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+    }
+
     public void TowerUpgradePanel(bool status)
     {
         towerUpgradePanel.SetActive(status);
@@ -79,12 +86,26 @@ public class UIManager : MonoBehaviour
 
     public void TowerHealthUpgrade()
     {
-        GameObject.Find("PlayerTower").GetComponent<PlayerTower>().PlayerTowerHealthUpgrade(1);
+        if (GameManager.Instance._playerScore > 5)
+        {
+            GameManager.Instance.Purchasing(5);
+            GameObject.Find("PlayerTower").GetComponent<PlayerTower>().PlayerTowerHealthUpgrade(1);
+        }
     }
 
     public void TowerAttackSpeedUpgrade()
     {
-
+        if (GameManager.Instance._playerScore >= 5 && GameManager.Instance._attackAbility)
+        {
+            GameManager.Instance.Purchasing(5);
+            GameObject.Find("TowerShooter").GetComponent<TowerShooter>().ReduceCollDownUpgrade();
+        }
+        else if (!GameManager.Instance._attackAbility && GameManager.Instance._playerScore >= 10)
+        {
+            GameManager.Instance.Purchasing(10);
+            GameManager.Instance.UnlockAttackAbility();
+            abilityLock.SetActive(false);
+        }
     }
 
     public void TowerTurretUpgrade()

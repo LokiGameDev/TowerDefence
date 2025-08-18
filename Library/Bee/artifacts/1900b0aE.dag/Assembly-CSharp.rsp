@@ -361,6 +361,8 @@
 "Assets/Scripts/InputManager.cs"
 "Assets/Scripts/PlayerTower.cs"
 "Assets/Scripts/SpawnManager.cs"
+"Assets/Scripts/TowerBullet.cs"
+"Assets/Scripts/TowerShooter.cs"
 "Assets/Scripts/UIManager.cs"
 -langversion:9.0
 
