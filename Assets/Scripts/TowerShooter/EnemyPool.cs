@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class EnemyPool : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private Enemy enemyPrefab;
     [SerializeField]
     private Queue<Enemy> enemyPool = new Queue<Enemy>();
+    #endregion
 
+    #region Singleton
     private static EnemyPool _instance;
     public static EnemyPool Instance
     {
@@ -24,7 +27,9 @@ public class EnemyPool : MonoBehaviour
     {
         _instance = this;
     }
+    #endregion
 
+    #region Functions
     public Enemy Get()
     {
         if (enemyPool.Count == 0)
@@ -46,4 +51,5 @@ public class EnemyPool : MonoBehaviour
         enemy.gameObject.SetActive(false);
         enemyPool.Enqueue(enemy);
     }
+    #endregion
 }

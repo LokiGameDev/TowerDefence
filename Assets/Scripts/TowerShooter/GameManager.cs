@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    #region Singleton
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -20,8 +21,9 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
     }
+    #endregion
 
-
+    #region Variables
     public int _waveLevel { get; private set; }
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
@@ -30,7 +32,9 @@ public class GameManager : MonoBehaviour
     private bool spawnWaveInterval;
     public SpawnManager spawnManager;
     public bool _attackAbility { get; private set; }
+    #endregion
 
+    #region Unity Methods
     void Start()
     {
         _waveLevel = 1;
@@ -52,6 +56,7 @@ public class GameManager : MonoBehaviour
             currentTime += Time.deltaTime;
         }
     }
+    #endregion
 
     public void GameOver()
     {
