@@ -5,7 +5,7 @@ public class PlacementSystem : MonoBehaviour
     #region Variables
 
     [SerializeField]
-    private GameObject placementIndicator, buildingPositionIndicator;
+    private GameObject placementIndicator, buildingPositionIndicator, gridLineVisual;
     [SerializeField]
     private InputManager inputManager;
     [SerializeField]
@@ -19,6 +19,7 @@ public class PlacementSystem : MonoBehaviour
     {
         placementIndicator.SetActive(false);
         buildingPositionIndicator.SetActive(false);
+        gridLineVisual.SetActive(false);
     }
 
     private void Update()
@@ -35,6 +36,7 @@ public class PlacementSystem : MonoBehaviour
     {
         placementIndicator.SetActive(state);
         buildingPositionIndicator.SetActive(state);
+        gridLineVisual.SetActive(state);
         isBuildMode = state;
     }
 }
