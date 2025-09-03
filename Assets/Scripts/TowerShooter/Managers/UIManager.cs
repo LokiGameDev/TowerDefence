@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
                  waveBar;
     public GameObject gameOverPanel,
                       towerUpgradePanel,
+                      buildModePanel,
                       abilityLock;
     public bool upgradePanelOpen;
     [SerializeField]
@@ -39,13 +40,14 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region Unity Methods
-    
+
     void Start()
     {
         gameOverPanel.SetActive(false);
         towerUpgradePanel.SetActive(false);
         upgradePanelOpen = false;
         abilityLock.SetActive(true);
+        buildModePanel.SetActive(false);
     }
     #endregion
 
@@ -64,6 +66,7 @@ public class UIManager : MonoBehaviour
     public void BuildModeButton()
     {
         GameManager.Instance.BuildMode();
+        buildModePanel.SetActive(GameManager.Instance.isBuildMode);
     }
 
     #endregion

@@ -68,12 +68,14 @@
     <Compile Include="Assets\Scripts\TowerShooter\Player\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\TestHelper.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\PlayerTower.cs" />
+    <Compile Include="Assets\Scripts\Building\InputManagerBuildMode.cs" />
     <Compile Include="Assets\Scripts\Building\PlacementSystem.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\TowerBullet.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\TowerShooter.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Enemy\EnemyPool.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\InputManager.cs" />
+    <Compile Include="Assets\Scripts\Building\ObjectsDatabaseSO.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Enemy\Enemy.cs" />
   </ItemGroup>
@@ -994,6 +996,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1004,10 +1010,6 @@
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">

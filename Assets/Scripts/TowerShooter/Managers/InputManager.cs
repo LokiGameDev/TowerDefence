@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -8,15 +7,7 @@ public class InputManager : MonoBehaviour
 
     [SerializeField]
     private Camera mainCamera;
-    private bool isBuildMode = false;
-
-    private Vector3 lastPosition;
-
-    [SerializeField]
-    private LayerMask placementLayer;
-
-    [SerializeField]
-    private PlacementSystem placementSystem;
+    private bool gameStarted = false;
 
     #endregion
 
@@ -24,19 +15,12 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (!isBuildMode)
-        {
-            WaveMode();
-        }
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.N) && !GameManager.Instance.isBuildMode && !gameStarted)
         {
             GameManager.Instance.StartTheGame();
+            gameStarted = true;
         }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            isBuildMode = !isBuildMode;
-            placementSystem.BuildMode(isBuildMode);
-        }
+        WaveMode();
     }
 
     #endregion
@@ -64,27 +48,4 @@ public class InputManager : MonoBehaviour
 
     #endregion
 
-    #region BuildMode Methods
-
-    public Vector3 GetSelectedMapPosition()
-    {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = mainCamera.nearClipPlane;
-        Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100, placementLayer))
-        {
-            lastPosition = hit.point;
-        }
-        return lastPosition;
-    }
-
-    public bool BuildMode()
-    {
-        isBuildMode = !isBuildMode;
-        placementSystem.BuildMode(isBuildMode);
-        return isBuildMode;
-    }
-
-    #endregion
 }

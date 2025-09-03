@@ -31,15 +31,16 @@ public class GameManager : MonoBehaviour
     private float spawnWaveWaitTime;
     private float currentTime;
     private bool spawnWaveInterval;
+    public bool isBuildMode { get; private set; } = false;
     public bool _attackAbility { get; private set; }
     public SpawnManager spawnManager;
     [SerializeField]
-    private InputManager inputManager;
+    private GameObject inputManager, inputManagerBuildMode;
 
     #endregion
 
     #region Unity Methods
-    
+
     void Start()
     {
         _waveLevel = 1;
@@ -50,6 +51,8 @@ public class GameManager : MonoBehaviour
         _attackAbility = false;
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.UpdateWaveBar(0, false);
+        inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
+        inputManager.GetComponent<InputManager>().enabled = true;
     }
 
     void Update()
@@ -96,9 +99,19 @@ public class GameManager : MonoBehaviour
 
     public void BuildMode()
     {
-        bool status = inputManager.BuildMode();
-        if(status) Time.timeScale = 0;
-        else Time.timeScale = 1;
+        isBuildMode = !isBuildMode;
+        if (isBuildMode)
+        {
+            Time.timeScale = 0;
+            inputManager.GetComponent<InputManager>().enabled = false;
+            inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = true;
+        }
+        else
+        {
+            Time.timeScale = 1;
+            inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
+            inputManager.GetComponent<InputManager>().enabled = true;
+        }
     }
 
     #endregion
