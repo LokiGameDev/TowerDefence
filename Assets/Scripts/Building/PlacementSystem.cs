@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlacementSystem : MonoBehaviour
@@ -6,7 +7,7 @@ public class PlacementSystem : MonoBehaviour
     #region Variables
 
     [SerializeField]
-    private GameObject placementIndicator, buildingPositionIndicator, gridLineVisual;
+    private GameObject gridLineVisual;
     [SerializeField]
     private InputManagerBuildMode inputManagerBuildMode;
     [SerializeField]
@@ -14,31 +15,45 @@ public class PlacementSystem : MonoBehaviour
 
     [SerializeField]
     private ObjectsDatabaseSO database;
-    private int selectedObjectIndex = -1;
 
     private bool isBuildMode = false;
+
+    private GridData gridData;
+
+    [SerializeField]
+    private PreviewSystem previewSystem;
+
+    private Vector3Int lastValidPosition = Vector3Int.zero;
+
+    [SerializeField]
+    private ObjectPlacer objectPlacer;
+
+    IBuildingState buildingState;
 
     #endregion
 
     void Start()
     {
-        placementIndicator.SetActive(false);
         StopPlacement();
+        gridData = new GridData();
     }
 
     public void StartPlacement(int ID)
     {
         StopPlacement();
-        selectedObjectIndex = database.objectsData.FindIndex(x => x.ID == ID);
-        if (selectedObjectIndex < 0)
-        {
-            Debug.LogError($"{ID} not found in database.");
-            return;
-        }
-        buildingPositionIndicator.SetActive(true);
         gridLineVisual.SetActive(true);
+        buildingState = new PlacementState(ID, grid, previewSystem, database, gridData, objectPlacer);
         inputManagerBuildMode.OnClicked += PlaceStructure;
         inputManagerBuildMode.OnExit += StopPlacement;
+    }
+
+    public void StartRemoving()
+    {
+        StopPlacement();
+        gridLineVisual.SetActive(true);
+        buildingState = new RemovingState(grid, previewSystem, gridData, objectPlacer);
+        inputManagerBuildMode.OnClicked += PlaceStructure;
+        inputManagerBuildMode.OnExit += StopPlacement;  
     }
 
     private void PlaceStructure()
@@ -46,34 +61,37 @@ public class PlacementSystem : MonoBehaviour
         if (inputManagerBuildMode.IsPointerOverUI()) return;
         Vector3 mousePosition = inputManagerBuildMode.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        GameObject playerTurret = Instantiate(database.objectsData[selectedObjectIndex].prefab);
-        playerTurret.transform.position = grid.CellToWorld(gridPosition);
+
+        buildingState.OnAction(gridPosition);
     }
 
     private void StopPlacement()
     {
-        selectedObjectIndex = -1;
-        buildingPositionIndicator.SetActive(false);
+        if (buildingState == null) return;
         gridLineVisual.SetActive(false);
+        buildingState.EndState();
         inputManagerBuildMode.OnClicked -= PlaceStructure;
         inputManagerBuildMode.OnExit -= StopPlacement;
+        lastValidPosition = Vector3Int.zero;
     }
 
     private void Update()
     {
-        if (!isBuildMode || selectedObjectIndex < 0) return;
+        if (!isBuildMode || buildingState == null) return;
 
         Vector3 mousePosition = inputManagerBuildMode.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        placementIndicator.transform.position = mousePosition;
-        buildingPositionIndicator.transform.position = grid.CellToWorld(gridPosition);
+        
+        if (lastValidPosition != gridPosition)
+        {
+            buildingState.UpdateState(gridPosition);
+            lastValidPosition = gridPosition;
+        }
     }
 
     public void BuildMode(bool state)
     {
-        placementIndicator.SetActive(state);
-        buildingPositionIndicator.SetActive(state);
-        gridLineVisual.SetActive(state);
+        if(gridLineVisual!=null) gridLineVisual.SetActive(state);
         isBuildMode = state;
     }
 }

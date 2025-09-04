@@ -72,11 +72,17 @@
     <Compile Include="Assets\Scripts\Building\PlacementSystem.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\TowerBullet.cs" />
+    <Compile Include="Assets\Scripts\Building\IBuildingState.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\TowerShooter.cs" />
+    <Compile Include="Assets\Scripts\Building\PlacementState.cs" />
+    <Compile Include="Assets\Scripts\Building\GridData.cs" />
+    <Compile Include="Assets\Scripts\Building\RemovingState.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Enemy\EnemyPool.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\Building\ObjectsDatabaseSO.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\SpawnManager.cs" />
+    <Compile Include="Assets\Scripts\Building\PreviewSystem.cs" />
+    <Compile Include="Assets\Scripts\Building\ObjectPlacer.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Enemy\Enemy.cs" />
   </ItemGroup>
   <ItemGroup>
