@@ -68,9 +68,9 @@ public class PlayerTower : MonoBehaviour
 
     public void TowerTurretUpgrade()
     {
-        if (GameManager.Instance._playerScore >= 30 && GameManager.Instance._turretPurchase)
+        if (GameManager.Instance._turretPurchase)
         {
-            UIManager.Instance.TurretPurchasePanel(true);
+            UIManager.Instance.TurretPurchasePanel();
         }
         else if (!GameManager.Instance._turretPurchase && GameManager.Instance._playerScore >= 25)
         {

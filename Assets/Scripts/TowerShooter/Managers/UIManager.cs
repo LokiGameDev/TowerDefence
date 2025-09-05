@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel,
                       towerUpgradePanel,
                       turretPurchasePanelGameObject,
+                      inventoryPanel,
                       buildModePanel;
     
     public GameObject[] abilityLock;
@@ -51,6 +52,7 @@ public class UIManager : MonoBehaviour
     {
         gameOverPanel.SetActive(false);
         towerUpgradePanel.SetActive(false);
+        inventoryPanel.SetActive(false);
         upgradePanelOpen = false;
         foreach(var abilityLockObj in abilityLock)
         {
@@ -70,13 +72,15 @@ public class UIManager : MonoBehaviour
 
     public void UpgradeButton()
     {
-        TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+        if(!GameManager.Instance.isBuildMode) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 
     public void BuildModeButton()
     {
+        if (towerUpgradePanel.activeSelf) return;
         GameManager.Instance.BuildMode();
         buildModePanel.SetActive(GameManager.Instance.isBuildMode);
+        inventoryPanel.SetActive(GameManager.Instance.isBuildMode);
     }
 
     #endregion
@@ -86,7 +90,11 @@ public class UIManager : MonoBehaviour
     public void TowerUpgradePanel(bool status)
     {
         towerUpgradePanel.SetActive(status);
-        if (!status) turretPurchasePanelGameObject.SetActive(status);
+        if (!status)
+        {
+            turretPurchasePanelGameObject.SetActive(status);
+            inventoryPanel.SetActive(status);
+        }
         upgradePanelOpen = status;
         GameManager.Instance.GamePauseStatus(!status);
     }
@@ -114,9 +122,11 @@ public class UIManager : MonoBehaviour
         abilityLock[index].SetActive(false);
     }
 
-    public void TurretPurchasePanel(bool status)
+    public void TurretPurchasePanel()
     {
+        bool status = !turretPurchasePanelGameObject.activeSelf;
         turretPurchasePanelGameObject.SetActive(status);
+        inventoryPanel.SetActive(status);
     }
 
     #endregion

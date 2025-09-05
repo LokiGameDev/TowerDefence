@@ -4870,7 +4870,8 @@ MonoBehaviour:
   gameOverPanel: {fileID: 1555574982}
   towerUpgradePanel: {fileID: 874462353}
   turretPurchasePanelGameObject: {fileID: 896538706}
-  buildModePanel: {fileID: 87625158}
+  inventoryPanel: {fileID: 1472291471}
+  buildModePanel: {fileID: 1758316431}
   abilityLock:
   - {fileID: 1379703046}
   - {fileID: 810974415}
