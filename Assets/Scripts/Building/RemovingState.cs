@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class RemovingState : IBuildingState
 {
+    #region Variables
+
     private int gameObjectIndex = -1;
     Grid grid;
     PreviewSystem previewSystem;
     GridData gridData;
     ObjectPlacer objectPlacer;
+
+    #endregion
 
     public RemovingState(Grid grid, PreviewSystem previewSystem, GridData gridData, ObjectPlacer objectPlacer)
     {
@@ -14,9 +18,11 @@ public class RemovingState : IBuildingState
         this.previewSystem = previewSystem;
         this.gridData = gridData;
         this.objectPlacer = objectPlacer;
-        
+
         previewSystem.StartShowingRemovePreview();
     }
+
+    #region Events
 
     public void EndState()
     {
@@ -43,4 +49,6 @@ public class RemovingState : IBuildingState
         bool canRemove = !gridData.CanPlaceObjectAt(gridPosition, Vector2Int.one);
         previewSystem.UpdatePreviewPosition(grid.CellToWorld(gridPosition), canRemove);
     }
+    
+    #endregion
 }

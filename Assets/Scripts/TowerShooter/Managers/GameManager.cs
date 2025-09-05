@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     private bool spawnWaveInterval;
     public bool isBuildMode { get; private set; } = false;
     public bool _attackAbility { get; private set; }
+    public bool _turretPurchase { get; private set; }
+    public bool _canUpgradeHealth { get; private set; }
     public SpawnManager spawnManager;
     [SerializeField]
     private GameObject inputManager, inputManagerBuildMode;
@@ -109,6 +111,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Time.timeScale = 1;
+            inputManagerBuildMode.GetComponent<InputManagerBuildMode>().OnExitMethod();
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
             inputManager.GetComponent<InputManager>().enabled = true;
         }
@@ -140,10 +143,12 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateUIElements();
     }
 
-    public void UnlockAttackAbility()
+    public void UnlockAbility(int index)
     {
-        _attackAbility = true;
-        UIManager.Instance.AbilityUnlock();
+        if (index == 0) _attackAbility = true;
+        if (index == 2) _turretPurchase = true;
+        if (index == 1) _canUpgradeHealth = true;
+        UIManager.Instance.AbilityUnlock(index);
     }
 
     public void AddScore(int score)

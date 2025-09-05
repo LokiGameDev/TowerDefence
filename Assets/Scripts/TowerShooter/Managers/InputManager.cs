@@ -8,6 +8,8 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private Camera mainCamera;
     private bool gameStarted = false;
+    [SerializeField]
+    private InventoryManager inventoryManager;
 
     #endregion
 
@@ -19,6 +21,10 @@ public class InputManager : MonoBehaviour
         {
             GameManager.Instance.StartTheGame();
             gameStarted = true;
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            inventoryManager?.AddItem(0, 1);
         }
         WaveMode();
     }

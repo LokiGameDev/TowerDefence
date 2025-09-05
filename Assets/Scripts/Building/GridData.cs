@@ -23,13 +23,25 @@ public class GridData
     private List<Vector3Int> CalculatePositions(Vector3Int gridPosition, Vector2 objectSize)
     {
         List<Vector3Int> positions = new();
-        for (int x = 0; x < objectSize.x; x++)
+        // for (int x = 0; x < objectSize.x; x++)
+        // {
+        //     for (int z = 0; z < objectSize.y; z++)
+        //     {
+        //         positions.Add(gridPosition + new Vector3Int(x, 0, z));
+        //     }
+        // }
+
+        int halfSizeX = Mathf.FloorToInt(objectSize.x / 2);
+        int halfSizeY = Mathf.FloorToInt(objectSize.y / 2);
+
+        for (int x = -halfSizeX; x <= halfSizeX; x++)
         {
-            for (int z = 0; z < objectSize.y; z++)
+            for (int z = -halfSizeY; z <= halfSizeY; z++)
             {
                 positions.Add(gridPosition + new Vector3Int(x, 0, z));
             }
         }
+
         return positions;
     }
 

@@ -35,14 +35,19 @@ public class PlayerTower : MonoBehaviour
     #endregion
 
     #region Upgrade Methods
-    
+
     public void TowerHealthUpgrade()
     {
-        if (GameManager.Instance._playerScore >= 20)
+        if (GameManager.Instance._playerScore >= 20 && GameManager.Instance._canUpgradeHealth)
         {
             _maxTowerHealth++;
             UpdateTowerUI();
             GameManager.Instance.Purchasing(20);
+        }
+        else if (GameManager.Instance._playerScore >= 30)
+        {
+            GameManager.Instance.UnlockAbility(1);
+            GameManager.Instance.Purchasing(30);
         }
     }
 
@@ -57,15 +62,20 @@ public class PlayerTower : MonoBehaviour
         else if (!GameManager.Instance._attackAbility && GameManager.Instance._playerScore >= 10)
         {
             GameManager.Instance.Purchasing(10);
-            GameManager.Instance.UnlockAttackAbility();
+            GameManager.Instance.UnlockAbility(0);
         }
     }
 
     public void TowerTurretUpgrade()
     {
-        if(GameManager.Instance._playerScore >= 30)
+        if (GameManager.Instance._playerScore >= 30 && GameManager.Instance._turretPurchase)
         {
-            
+            UIManager.Instance.TurretPurchasePanel(true);
+        }
+        else if (!GameManager.Instance._turretPurchase && GameManager.Instance._playerScore >= 25)
+        {
+            GameManager.Instance.Purchasing(25);
+            GameManager.Instance.UnlockAbility(2);
         }
     }
 

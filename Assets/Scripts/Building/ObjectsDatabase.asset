@@ -15,5 +15,9 @@ MonoBehaviour:
   objectsData:
   - <Name>k__BackingField: Turret
     <ID>k__BackingField: 0
-    <size>k__BackingField: {x: 1, y: 1}
+    <size>k__BackingField: {x: 3, y: 3}
     <prefab>k__BackingField: {fileID: 429392704165236832, guid: 5d32b05bc2468744785f9e92bd56000e, type: 3}
+  - <Name>k__BackingField: Blocker
+    <ID>k__BackingField: 1
+    <size>k__BackingField: {x: 1, y: 1}
+    <prefab>k__BackingField: {fileID: 2056488359552173249, guid: 8b72ab6e6f651dd4fb0bac9a2400a4ff, type: 3}

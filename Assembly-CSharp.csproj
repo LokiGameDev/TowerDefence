@@ -68,7 +68,9 @@
     <Compile Include="Assets\Scripts\TowerShooter\Player\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\TestHelper.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\PlayerTower.cs" />
+    <Compile Include="Assets\Scripts\TowerShooter\Managers\PusrchaseManager.cs" />
     <Compile Include="Assets\Scripts\Building\InputManagerBuildMode.cs" />
+    <Compile Include="Assets\Scripts\TowerShooter\Managers\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Building\PlacementSystem.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Player\TowerBullet.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Assets\Scripts\Building\PlacementState.cs" />
     <Compile Include="Assets\Scripts\Building\GridData.cs" />
     <Compile Include="Assets\Scripts\Building\RemovingState.cs" />
+    <Compile Include="Assets\Scripts\TowerShooter\Player\PlayerTurret.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Enemy\EnemyPool.cs" />
     <Compile Include="Assets\Scripts\TowerShooter\Managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\Building\ObjectsDatabaseSO.cs" />

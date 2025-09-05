@@ -21,6 +21,8 @@ public class InputManagerBuildMode : MonoBehaviour
 
     #endregion
 
+    #region Unity Methods
+
     void OnEnable()
     {
         placementSystem.BuildMode(true);
@@ -39,10 +41,12 @@ public class InputManagerBuildMode : MonoBehaviour
         }
     }
 
-    public bool IsPointerOverUI()
+    void OnDisable()
     {
-        return EventSystem.current.IsPointerOverGameObject();
+        placementSystem.BuildMode(false);
     }
+
+    #endregion
 
     #region BuildMode Methods
 
@@ -59,10 +63,15 @@ public class InputManagerBuildMode : MonoBehaviour
         return lastPosition;
     }
 
-    #endregion
-
-    void OnDisable()
+    public void OnExitMethod()
     {
-        placementSystem.BuildMode(false);
+        OnExit?.Invoke();
     }
+
+    public bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    #endregion
 }

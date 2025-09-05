@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,11 +32,16 @@ public class UIManager : MonoBehaviour
                  waveBar;
     public GameObject gameOverPanel,
                       towerUpgradePanel,
-                      buildModePanel,
-                      abilityLock;
+                      turretPurchasePanelGameObject,
+                      buildModePanel;
+    
+    public GameObject[] abilityLock;
     public bool upgradePanelOpen;
     [SerializeField]
     private PlayerTower playerTower;
+    [SerializeField]
+    private InventoryManager inventoryManager;
+    public Text[] inventoryTexts;
 
     #endregion
 
@@ -46,7 +52,11 @@ public class UIManager : MonoBehaviour
         gameOverPanel.SetActive(false);
         towerUpgradePanel.SetActive(false);
         upgradePanelOpen = false;
-        abilityLock.SetActive(true);
+        foreach(var abilityLockObj in abilityLock)
+        {
+            abilityLockObj.SetActive(true);
+        }
+        turretPurchasePanelGameObject.SetActive(false);
         buildModePanel.SetActive(false);
     }
     #endregion
@@ -76,6 +86,7 @@ public class UIManager : MonoBehaviour
     public void TowerUpgradePanel(bool status)
     {
         towerUpgradePanel.SetActive(status);
+        if (!status) turretPurchasePanelGameObject.SetActive(status);
         upgradePanelOpen = status;
         GameManager.Instance.GamePauseStatus(!status);
     }
@@ -98,9 +109,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void AbilityUnlock()
+    public void AbilityUnlock(int index)
     {
-        abilityLock.SetActive(false);
+        abilityLock[index].SetActive(false);
+    }
+
+    public void TurretPurchasePanel(bool status)
+    {
+        turretPurchasePanelGameObject.SetActive(status);
     }
 
     #endregion
@@ -123,6 +139,12 @@ public class UIManager : MonoBehaviour
     {
         waveBar.gameObject.SetActive(status);
         if (waveBar != null && status) waveBar.fillAmount = value;
+    }
+
+    public void UpdateInvetory(int id, int qty)
+    {
+        if (id < 0 || id >= inventoryTexts.Length) return;
+        inventoryTexts[id].text = qty.ToString();
     }
 
     #endregion

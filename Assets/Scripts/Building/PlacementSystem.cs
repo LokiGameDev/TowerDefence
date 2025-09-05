@@ -28,6 +28,9 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField]
     private ObjectPlacer objectPlacer;
 
+    [SerializeField]
+    private InventoryManager inventoryManager;
+
     IBuildingState buildingState;
 
     #endregion
@@ -42,7 +45,7 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         gridLineVisual.SetActive(true);
-        buildingState = new PlacementState(ID, grid, previewSystem, database, gridData, objectPlacer);
+        buildingState = new PlacementState(ID, grid, previewSystem, database, gridData, objectPlacer, inventoryManager);
         inputManagerBuildMode.OnClicked += PlaceStructure;
         inputManagerBuildMode.OnExit += StopPlacement;
     }

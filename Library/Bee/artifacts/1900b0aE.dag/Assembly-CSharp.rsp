@@ -375,10 +375,13 @@
 "Assets/Scripts/TowerShooter/Enemy/EnemyPool.cs"
 "Assets/Scripts/TowerShooter/Managers/GameManager.cs"
 "Assets/Scripts/TowerShooter/Managers/InputManager.cs"
+"Assets/Scripts/TowerShooter/Managers/InventoryManager.cs"
+"Assets/Scripts/TowerShooter/Managers/PusrchaseManager.cs"
 "Assets/Scripts/TowerShooter/Managers/SpawnManager.cs"
 "Assets/Scripts/TowerShooter/Managers/UIManager.cs"
 "Assets/Scripts/TowerShooter/Player/CameraMovement.cs"
 "Assets/Scripts/TowerShooter/Player/PlayerTower.cs"
+"Assets/Scripts/TowerShooter/Player/PlayerTurret.cs"
 "Assets/Scripts/TowerShooter/Player/TowerBullet.cs"
 "Assets/Scripts/TowerShooter/Player/TowerShooter.cs"
 -langversion:9.0
