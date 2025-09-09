@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ public class UIManager : MonoBehaviour
     #region Variables
     public Text enemyCount,
                 playerScore,
+                infoDisplay,
                 waveLevel;
     public Image towerHealthBar,
                  waveBar;
@@ -35,7 +37,7 @@ public class UIManager : MonoBehaviour
                       turretPurchasePanelGameObject,
                       inventoryPanel,
                       buildModePanel;
-    
+
     public GameObject[] abilityLock;
     public bool upgradePanelOpen;
     [SerializeField]
@@ -54,7 +56,8 @@ public class UIManager : MonoBehaviour
         towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
         upgradePanelOpen = false;
-        foreach(var abilityLockObj in abilityLock)
+        infoDisplay.gameObject.SetActive(false);
+        foreach (var abilityLockObj in abilityLock)
         {
             abilityLockObj.SetActive(true);
         }
@@ -72,11 +75,12 @@ public class UIManager : MonoBehaviour
 
     public void UpgradeButton()
     {
-        if(!GameManager.Instance.isBuildMode) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+        if (!GameManager.Instance.isBuildMode) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 
     public void BuildModeButton()
     {
+        if (GameManager.Instance.IsWaveGoing()) return;
         if (towerUpgradePanel.activeSelf) return;
         GameManager.Instance.BuildMode();
         buildModePanel.SetActive(GameManager.Instance.isBuildMode);
@@ -89,14 +93,15 @@ public class UIManager : MonoBehaviour
 
     public void TowerUpgradePanel(bool status)
     {
+        if (GameManager.Instance.IsWaveGoing()) return;
         towerUpgradePanel.SetActive(status);
-        if (!status)
+        if (!status) // For return to game
         {
             turretPurchasePanelGameObject.SetActive(status);
             inventoryPanel.SetActive(status);
+            infoDisplay.gameObject.SetActive(status);
         }
         upgradePanelOpen = status;
-        GameManager.Instance.GamePauseStatus(!status);
     }
 
     public void TowerUpgradeButtons(int ID)
@@ -157,10 +162,26 @@ public class UIManager : MonoBehaviour
         inventoryTexts[id].text = qty.ToString();
     }
 
+    public void DisplayInformation(string msg)
+    {
+        if (!infoDisplay.gameObject.activeSelf)
+        {
+            infoDisplay.text = msg;
+            infoDisplay.gameObject.SetActive(true);
+            StartCoroutine(DisplayMessageCooldown());
+        }
+    }
+
     #endregion
 
     public void GameOver()
     {
         gameOverPanel.SetActive(true);
+    }
+
+    IEnumerator DisplayMessageCooldown()
+    {
+        yield return new WaitForSeconds(2);
+        infoDisplay.gameObject.SetActive(false);
     }
 }

@@ -38,16 +38,14 @@ public class PlayerTower : MonoBehaviour
 
     public void TowerHealthUpgrade()
     {
-        if (GameManager.Instance._playerScore >= 20 && GameManager.Instance._canUpgradeHealth)
+        if (GameManager.Instance.Purchasing(20) && GameManager.Instance._canUpgradeHealth)
         {
             _maxTowerHealth++;
             UpdateTowerUI();
-            GameManager.Instance.Purchasing(20);
         }
-        else if (GameManager.Instance._playerScore >= 30)
+        else if (GameManager.Instance.Purchasing(30))
         {
             GameManager.Instance.UnlockAbility(1);
-            GameManager.Instance.Purchasing(30);
         }
     }
 
@@ -59,9 +57,8 @@ public class PlayerTower : MonoBehaviour
             if (upgraded) GameManager.Instance.Purchasing(15);
             else Debug.Log("Already at max level");
         }
-        else if (!GameManager.Instance._attackAbility && GameManager.Instance._playerScore >= 10)
+        else if (!GameManager.Instance._attackAbility && GameManager.Instance.Purchasing(10))
         {
-            GameManager.Instance.Purchasing(10);
             GameManager.Instance.UnlockAbility(0);
         }
     }
@@ -72,9 +69,8 @@ public class PlayerTower : MonoBehaviour
         {
             UIManager.Instance.TurretPurchasePanel();
         }
-        else if (!GameManager.Instance._turretPurchase && GameManager.Instance._playerScore >= 25)
+        else if (!GameManager.Instance._turretPurchase && GameManager.Instance.Purchasing(25))
         {
-            GameManager.Instance.Purchasing(25);
             GameManager.Instance.UnlockAbility(2);
         }
     }

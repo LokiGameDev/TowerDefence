@@ -35,6 +35,7 @@ public class SpawnManager : MonoBehaviour
     {
         if (_canSpawnEnemy)
         {
+            GameManager.Instance.willEnemySpawn = true;
             var enemy = EnemyPool.Instance.Get();
             GameManager.Instance.EnemyGotSpawned();
             enemy.gameObject.transform.position = GenerateRandomSpawnLoc();
@@ -63,7 +64,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     #endregion
-    
+
     #region Coroutines
 
     IEnumerator SpawnTimeInterval()
@@ -74,6 +75,10 @@ public class SpawnManager : MonoBehaviour
         {
             _waveLevel--;
             SpawnWave();
+        }
+        else
+        {
+            GameManager.Instance.willEnemySpawn = false;
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     public bool _attackAbility { get; private set; }
     public bool _turretPurchase { get; private set; }
     public bool _canUpgradeHealth { get; private set; }
+    public bool canSpawnNextWave, willEnemySpawn;
     public SpawnManager spawnManager;
     [SerializeField]
     private GameObject inputManager, inputManagerBuildMode;
@@ -51,6 +53,8 @@ public class GameManager : MonoBehaviour
         spawnWaveWaitTime = 10;
         spawnWaveInterval = false;
         _attackAbility = false;
+        canSpawnNextWave = false;
+        willEnemySpawn = false;
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.UpdateWaveBar(0, false);
         inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
@@ -63,6 +67,10 @@ public class GameManager : MonoBehaviour
         {
             UIManager.Instance.UpdateWaveBar(currentTime / spawnWaveWaitTime, true);
             currentTime += Time.deltaTime;
+        }
+        if (Input.GetKeyDown(KeyCode.L) && !isBuildMode)
+        {
+            SpawnTheNextWave();
         }
     }
     #endregion
@@ -82,16 +90,16 @@ public class GameManager : MonoBehaviour
 
     public void SpawnTheNextWave()
     {
-        if (_enemyCount <= 0)
+        if (_enemyCount <= 0 && canSpawnNextWave)
         {
             _waveLevel++;
             spawnManager.StartTheSpawn(_waveLevel);
+            canSpawnNextWave = false;
         }
-    }
-
-    public void GamePauseStatus(bool status)
-    {
-        Time.timeScale = status ? 1 : 0;
+        else
+        {
+            Debug.Log("Cannot spawn the next wave");
+        }
     }
 
     public void StartTheGame()
@@ -104,13 +112,11 @@ public class GameManager : MonoBehaviour
         isBuildMode = !isBuildMode;
         if (isBuildMode)
         {
-            Time.timeScale = 0;
             inputManager.GetComponent<InputManager>().enabled = false;
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = true;
         }
         else
         {
-            Time.timeScale = 1;
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().OnExitMethod();
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
             inputManager.GetComponent<InputManager>().enabled = true;
@@ -124,11 +130,12 @@ public class GameManager : MonoBehaviour
     public void EnemyGotDestroyed()
     {
         _enemyCount--;
-        if (_enemyCount <= 0)
+        if (_enemyCount <= 0 && !willEnemySpawn)
         {
             currentTime = 0;
             StartCoroutine(SpawnWaveIntervalTime());
         }
+        UIManager.Instance.UpdateUIElements();
     }
 
     public void EnemyGotSpawned()
@@ -137,10 +144,19 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateUIElements();
     }
 
-    public void Purchasing(int value)
+    public bool Purchasing(int value)
     {
-        _playerScore -= value;
+        if (_playerScore >= value)
+        {
+            _playerScore -= value;
+            return true;
+        }
+        else
+        {
+            UIManager.Instance.DisplayInformation("Not enough Money");
+        }
         UIManager.Instance.UpdateUIElements();
+        return false;
     }
 
     public void UnlockAbility(int index)
@@ -168,8 +184,14 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(spawnWaveWaitTime);
         spawnWaveInterval = false;
         UIManager.Instance.UpdateWaveBar(0, false);
-        SpawnTheNextWave();
+        canSpawnNextWave = true;
     }
+    
 
     #endregion
+
+    public bool IsWaveGoing()
+    {
+        return GameObject.FindGameObjectsWithTag("Enemy").Count() > 0 ? true : false;
+    }
 }
