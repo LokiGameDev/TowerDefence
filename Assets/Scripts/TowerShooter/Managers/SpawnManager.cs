@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
     #region Variables
 
     private bool _canSpawnEnemy;
-    private int _waveLevel;
+    private int _enemyCount;
     private float _spawnRadius;
 
     #endregion
@@ -26,8 +26,8 @@ public class SpawnManager : MonoBehaviour
 
     public void StartTheSpawn(int level)
     {
-        _waveLevel = level;
-        _waveLevel--;
+        GameManager.Instance.willEnemySpawn = true;
+        _enemyCount = level - 1;
         SpawnWave();
     }
 
@@ -35,7 +35,6 @@ public class SpawnManager : MonoBehaviour
     {
         if (_canSpawnEnemy)
         {
-            GameManager.Instance.willEnemySpawn = true;
             var enemy = EnemyPool.Instance.Get();
             GameManager.Instance.EnemyGotSpawned();
             enemy.gameObject.transform.position = GenerateRandomSpawnLoc();
@@ -63,6 +62,12 @@ public class SpawnManager : MonoBehaviour
         return pos;
     }
 
+    public void WaveOver()
+    {
+        _enemyCount = 0;
+        StopAllCoroutines();
+    }
+
     #endregion
 
     #region Coroutines
@@ -71,9 +76,9 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         _canSpawnEnemy = true;
-        if (_waveLevel > 0)
+        if (_enemyCount > 0)
         {
-            _waveLevel--;
+            _enemyCount--;
             SpawnWave();
         }
         else

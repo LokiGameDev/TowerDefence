@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public int _waveLevel { get; private set; }
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
+
     private float spawnWaveWaitTime;
     private float currentTime;
     private bool spawnWaveInterval;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     public bool _attackAbility { get; private set; }
     public bool _turretPurchase { get; private set; }
     public bool _canUpgradeHealth { get; private set; }
+    public bool _isWaveStarted { get; private set; } = false;
     public bool canSpawnNextWave, willEnemySpawn;
     public SpawnManager spawnManager;
     [SerializeField]
@@ -47,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        _waveLevel = 1;
+        _waveLevel = 10;
         _enemyCount = 0;
         _playerScore = 0;
         spawnWaveWaitTime = 10;
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
         willEnemySpawn = false;
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.UpdateWaveBar(0, false);
+        UIManager.Instance.WaveStatus(false);
         inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
         inputManager.GetComponent<InputManager>().enabled = true;
     }
@@ -68,43 +71,26 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.UpdateWaveBar(currentTime / spawnWaveWaitTime, true);
             currentTime += Time.deltaTime;
         }
-        if (Input.GetKeyDown(KeyCode.L) && !isBuildMode)
-        {
-            SpawnTheNextWave();
-        }
     }
     #endregion
 
     #region GameRelated Change Methods
 
-    public void GameOver()
+    public void WaveOver()
     {
-        Debug.Log("Game Over");
-        UIManager.Instance.GameOver();
+        StopAllCoroutines();
+        _isWaveStarted = false;
+        _waveLevel = 0;
+        _enemyCount = 0;
+        spawnManager.WaveOver();
+        KillAllAvailableEnemies();
+        UIManager.Instance.UpdateUIElements();
+        UIManager.Instance.WaveStatus(false);
     }
 
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
-    }
-
-    public void SpawnTheNextWave()
-    {
-        if (_enemyCount <= 0 && canSpawnNextWave)
-        {
-            _waveLevel++;
-            spawnManager.StartTheSpawn(_waveLevel);
-            canSpawnNextWave = false;
-        }
-        else
-        {
-            Debug.Log("Cannot spawn the next wave");
-        }
-    }
-
-    public void StartTheGame()
-    {
-        spawnManager.StartTheSpawn(_waveLevel);
     }
 
     public void BuildMode()
@@ -149,6 +135,7 @@ public class GameManager : MonoBehaviour
         if (_playerScore >= value)
         {
             _playerScore -= value;
+            UIManager.Instance.UpdateUIElements();
             return true;
         }
         else
@@ -185,13 +172,35 @@ public class GameManager : MonoBehaviour
         spawnWaveInterval = false;
         UIManager.Instance.UpdateWaveBar(0, false);
         canSpawnNextWave = true;
+        _isWaveStarted = false;
+        StartTheWave();
     }
-    
+
 
     #endregion
 
     public bool IsWaveGoing()
     {
         return GameObject.FindGameObjectsWithTag("Enemy").Count() > 0 ? true : false;
+    }
+
+    public void StartTheWave()
+    {
+        if (!_isWaveStarted)
+        {
+            UIManager.Instance.WaveStatus(true);
+            _waveLevel++;
+            spawnManager.StartTheSpawn(_waveLevel);
+            _isWaveStarted = true;
+        }
+    }
+
+    private void KillAllAvailableEnemies()
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var ene in enemies)
+        {
+            ene.GetComponent<Enemy>().GotKilled(false);
+        }
     }
 }

@@ -14,7 +14,11 @@ public class Enemy : MonoBehaviour
 
     #region Unity Methods
 
-    void Start() => _speed = 2f;
+    void Start()
+    {
+        _enemyValue = 1;
+        _speed = 2f;
+    }
 
     void OnEnable()
     {
@@ -37,10 +41,10 @@ public class Enemy : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime); ;
     }
 
-    public void GotKilled()
+    public void GotKilled(bool isScore)
     {
         EnemyPool.Instance.ReturnToPool(this);
-        GameManager.Instance.EnemyGotDestroyed();
+        if(isScore) GameManager.Instance.EnemyGotDestroyed();
     }
     
     #endregion

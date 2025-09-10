@@ -7,7 +7,6 @@ public class InputManager : MonoBehaviour
 
     [SerializeField]
     private Camera mainCamera;
-    private bool gameStarted = false;
     [SerializeField]
     private InventoryManager inventoryManager;
 
@@ -17,11 +16,6 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.N) && !GameManager.Instance.isBuildMode && !gameStarted)
-        {
-            GameManager.Instance.StartTheGame();
-            gameStarted = true;
-        }
         if (Input.GetKeyDown(KeyCode.B))
         {
             inventoryManager?.AddItem(0, 1);
@@ -46,7 +40,7 @@ public class InputManager : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
                     GameManager.Instance.AddScore(hit.collider.gameObject.GetComponent<Enemy>()._enemyValue);
-                    hit.collider.gameObject.GetComponent<Enemy>().GotKilled();
+                    hit.collider.gameObject.GetComponent<Enemy>().GotKilled(true);
                 }
             }
         }

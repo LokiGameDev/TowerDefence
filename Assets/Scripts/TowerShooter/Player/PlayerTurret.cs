@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ public class PlayerTurret : MonoBehaviour
     private GameObject projectilePrefab;
     [SerializeField]
     private float shootInterval = 1f;
+    [SerializeField]
+    private Transform projectileSpawnPos;
+    private bool canShoot;
     private GameObject turretMesh;
 
     private List<Transform> targets = new();
@@ -16,6 +20,7 @@ public class PlayerTurret : MonoBehaviour
     void Start()
     {
         turretMesh = transform.GetChild(0).gameObject;
+        canShoot = true;
     }
 
     private void FindAllTargets()
@@ -48,12 +53,27 @@ public class PlayerTurret : MonoBehaviour
 
     void Update()
     {
-        FindAllTargets();
-        FindTheClosestTarget();
-
-        if (currentTarget != null)
+        if (currentTarget == null || !currentTarget.gameObject.activeSelf)
+        {
+            FindAllTargets();
+            FindTheClosestTarget();
+        }
+        if (currentTarget != null && currentTarget.gameObject.activeSelf)
         {
             turretMesh.transform.LookAt(currentTarget);
+            if (canShoot)
+            {
+                var bullet = Instantiate(projectilePrefab, projectileSpawnPos.position, projectilePrefab.transform.rotation);
+                bullet.GetComponent<TowerBullet>().AttackTheTarget(currentTarget.gameObject);
+                canShoot = false;
+                StartCoroutine(ShootCooldown());
+            }
         }
+    }
+
+    IEnumerator ShootCooldown()
+    {
+        yield return new WaitForSeconds(shootInterval);
+        canShoot = true;
     }
 }

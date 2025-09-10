@@ -32,11 +32,13 @@ public class UIManager : MonoBehaviour
                 waveLevel;
     public Image towerHealthBar,
                  waveBar;
-    public GameObject gameOverPanel,
-                      towerUpgradePanel,
+    public GameObject towerUpgradePanel,
                       turretPurchasePanelGameObject,
                       inventoryPanel,
-                      buildModePanel;
+                      waveModePanel,
+                      menuModePanel,
+                      buildModePanel,
+                      buildThingsPanel;
 
     public GameObject[] abilityLock;
     public bool upgradePanelOpen;
@@ -52,7 +54,6 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        gameOverPanel.SetActive(false);
         towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
         upgradePanelOpen = false;
@@ -62,7 +63,7 @@ public class UIManager : MonoBehaviour
             abilityLockObj.SetActive(true);
         }
         turretPurchasePanelGameObject.SetActive(false);
-        buildModePanel.SetActive(false);
+        buildThingsPanel.SetActive(false);
     }
     #endregion
 
@@ -75,15 +76,15 @@ public class UIManager : MonoBehaviour
 
     public void UpgradeButton()
     {
-        if (!GameManager.Instance.isBuildMode) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+        if (!GameManager.Instance.isBuildMode && !GameManager.Instance._isWaveStarted) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 
     public void BuildModeButton()
     {
-        if (GameManager.Instance.IsWaveGoing()) return;
+        if (GameManager.Instance._isWaveStarted) return;
         if (towerUpgradePanel.activeSelf) return;
         GameManager.Instance.BuildMode();
-        buildModePanel.SetActive(GameManager.Instance.isBuildMode);
+        buildThingsPanel.SetActive(GameManager.Instance.isBuildMode);
         inventoryPanel.SetActive(GameManager.Instance.isBuildMode);
     }
 
@@ -174,14 +175,16 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    public void GameOver()
-    {
-        gameOverPanel.SetActive(true);
-    }
-
     IEnumerator DisplayMessageCooldown()
     {
         yield return new WaitForSeconds(2);
         infoDisplay.gameObject.SetActive(false);
+    }
+
+    public void WaveStatus(bool status)
+    {
+        waveModePanel.SetActive(status);
+        buildModePanel.SetActive(!status);
+        menuModePanel.SetActive(!status);
     }
 }

@@ -14,7 +14,7 @@ public class PlayerTower : MonoBehaviour
     void Start()
     {
         _maxTowerHealth = 20;
-        _towerHealth = 10;
+        _towerHealth = 5;
         UpdateTowerUI();
     }
 
@@ -24,7 +24,7 @@ public class PlayerTower : MonoBehaviour
         {
             _towerHealth--;
             UpdateTowerUI();
-            other.GetComponent<Enemy>().GotKilled();
+            other.GetComponent<Enemy>().GotKilled(true);
             if (_towerHealth <= 0)
             {
                 GameOver();
@@ -79,7 +79,9 @@ public class PlayerTower : MonoBehaviour
 
     void GameOver()
     {
-        GameManager.Instance.GameOver();
+        GameManager.Instance.WaveOver();
+        _towerHealth = _maxTowerHealth;
+        UpdateTowerUI();
     }
 
     void UpdateTowerUI()

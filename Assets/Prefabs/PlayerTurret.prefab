@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 8574612312814285533, guid: dc515e07cb9662c44adbe77e117013ea, type: 3}
   shootInterval: 3
+  projectileSpawnPos: {fileID: 174381168863177274}
 --- !u!1 &2932902236662431312
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,8 +76,8 @@ Transform:
   m_GameObject: {fileID: 2932902236662431312}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.01999998, y: -0.06999999, z: 1.2066667}
-  m_LocalScale: {x: 0.6666667, y: 1, z: 0.6666667}
+  m_LocalPosition: {x: 0, y: 0, z: 0.75}
+  m_LocalScale: {x: 0.3, y: 0.45, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8041877377835731192}

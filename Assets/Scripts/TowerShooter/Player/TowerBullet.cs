@@ -38,7 +38,7 @@ public class TowerBullet : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             GameManager.Instance.AddScore(other.GetComponent<Enemy>()._enemyValue);
-            other.GetComponent<Enemy>().GotKilled();
+            other.GetComponent<Enemy>().GotKilled(true);
             Destroy(this.gameObject);
         }
     }
