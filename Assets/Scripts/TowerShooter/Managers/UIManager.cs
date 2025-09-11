@@ -38,10 +38,10 @@ public class UIManager : MonoBehaviour
                       waveModePanel,
                       menuModePanel,
                       buildModePanel,
+                      waveStartButton,
                       buildThingsPanel;
 
     public GameObject[] abilityLock;
-    public bool upgradePanelOpen;
     [SerializeField]
     private PlayerTower playerTower;
     [SerializeField]
@@ -56,7 +56,6 @@ public class UIManager : MonoBehaviour
     {
         towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
-        upgradePanelOpen = false;
         infoDisplay.gameObject.SetActive(false);
         foreach (var abilityLockObj in abilityLock)
         {
@@ -76,16 +75,18 @@ public class UIManager : MonoBehaviour
 
     public void UpgradeButton()
     {
-        if (!GameManager.Instance.isBuildMode && !GameManager.Instance._isWaveStarted) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+        if (GameManager.Instance.isBuildMode) BuildModeButton();
+        waveStartButton.SetActive(towerUpgradePanel.activeSelf);
+        TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 
     public void BuildModeButton()
     {
-        if (GameManager.Instance._isWaveStarted) return;
-        if (towerUpgradePanel.activeSelf) return;
+        if (towerUpgradePanel.activeSelf) UpgradeButton();
         GameManager.Instance.BuildMode();
         buildThingsPanel.SetActive(GameManager.Instance.isBuildMode);
         inventoryPanel.SetActive(GameManager.Instance.isBuildMode);
+        waveStartButton.SetActive(!GameManager.Instance.isBuildMode);
     }
 
     #endregion
@@ -102,7 +103,6 @@ public class UIManager : MonoBehaviour
             inventoryPanel.SetActive(status);
             infoDisplay.gameObject.SetActive(status);
         }
-        upgradePanelOpen = status;
     }
 
     public void TowerUpgradeButtons(int ID)

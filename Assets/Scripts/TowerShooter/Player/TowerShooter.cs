@@ -7,7 +7,9 @@ public class TowerShooter : MonoBehaviour
 
     #region Variables
 
+    public bool _isAbilityUnlocked { get; private set; }
     private bool _canShoot;
+    private float _bulletSpeed = 5f;
     private float _shootCoolDown, _minShootCoolDown = 1;
     public GameObject bulletPrefab;
     private List<GameObject> enemiesInRange = new List<GameObject>();
@@ -20,6 +22,7 @@ public class TowerShooter : MonoBehaviour
     {
         _shootCoolDown = 5;
         _canShoot = true;
+        _isAbilityUnlocked = false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -41,11 +44,12 @@ public class TowerShooter : MonoBehaviour
     void Update()
     {
         var target = GetClosestEnemy();
-        if (target != null && target.activeSelf && _canShoot && GameManager.Instance._attackAbility)
+        if (target != null && target.activeSelf && _canShoot && _isAbilityUnlocked)
         {
             transform.LookAt(target.transform);
             var bullet = Instantiate(bulletPrefab, transform.position, bulletPrefab.transform.rotation);
-            bullet.GetComponent<TowerBullet>().AttackTheTarget(target);
+            bullet.GetComponent<PlayerBullet>().BulletSpeedSetUp(_bulletSpeed);
+            bullet.GetComponent<PlayerBullet>().AttackTheTarget(target);
             _canShoot = false;
             StartCoroutine(ShootCoolDown());
         }
@@ -86,6 +90,11 @@ public class TowerShooter : MonoBehaviour
             _shootCoolDown -= 1;
             return true;
         }
+    }
+
+    public void UnlockAttackAbility()
+    {
+        _isAbilityUnlocked = true;
     }
 
     #endregion

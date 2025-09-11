@@ -6,7 +6,7 @@ public class TestHelper : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            GameManager.Instance.AddScore(10);
+            GameManager.Instance.AddScore(100);
         }
     }
 }

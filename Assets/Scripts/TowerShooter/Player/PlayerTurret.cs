@@ -8,18 +8,27 @@ public class PlayerTurret : MonoBehaviour
     private GameObject projectilePrefab;
     [SerializeField]
     private float shootInterval = 1f;
+    private float _bulletSpeed = 10f;
     [SerializeField]
     private Transform projectileSpawnPos;
+    [SerializeField]
+    private Transform attackRangeCenter;
     private bool canShoot;
     private GameObject turretMesh;
 
     private List<Transform> targets = new();
 
     private Transform currentTarget = null;
+    private float _attackRadius;
+
+    [SerializeField]
+    private Renderer attackRangeRenderer;
 
     void Start()
     {
         turretMesh = transform.GetChild(0).gameObject;
+        _attackRadius = 10;
+        attackRangeRenderer.material.SetFloat("Radius", _attackRadius);
         canShoot = true;
     }
 
@@ -53,20 +62,22 @@ public class PlayerTurret : MonoBehaviour
 
     void Update()
     {
-        if (currentTarget == null || !currentTarget.gameObject.activeSelf)
-        {
-            FindAllTargets();
-            FindTheClosestTarget();
-        }
+        attackRangeRenderer.material.SetVector("_Center", attackRangeCenter.position);
+        FindAllTargets();
+        FindTheClosestTarget();
         if (currentTarget != null && currentTarget.gameObject.activeSelf)
         {
-            turretMesh.transform.LookAt(currentTarget);
-            if (canShoot)
+            if (Vector3.Distance(currentTarget.position, transform.position) < _attackRadius)
             {
-                var bullet = Instantiate(projectilePrefab, projectileSpawnPos.position, projectilePrefab.transform.rotation);
-                bullet.GetComponent<TowerBullet>().AttackTheTarget(currentTarget.gameObject);
-                canShoot = false;
-                StartCoroutine(ShootCooldown());
+                turretMesh.transform.LookAt(currentTarget);
+                if (canShoot)
+                {
+                    var bullet = Instantiate(projectilePrefab, projectileSpawnPos.position, projectilePrefab.transform.rotation);
+                    bullet.GetComponent<PlayerBullet>().BulletSpeedSetUp(_bulletSpeed);
+                    bullet.GetComponent<PlayerBullet>().AttackTheTarget(currentTarget.gameObject);
+                    canShoot = false;
+                    StartCoroutine(ShootCooldown());
+                }
             }
         }
     }

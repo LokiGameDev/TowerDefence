@@ -29,7 +29,7 @@ public class InputManager : MonoBehaviour
 
     private void WaveMode()
     {
-        if (Input.GetMouseButtonDown(0) && !UIManager.Instance.upgradePanelOpen)
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = Input.mousePosition;
 
@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
                     GameManager.Instance.AddScore(hit.collider.gameObject.GetComponent<Enemy>()._enemyValue);
-                    hit.collider.gameObject.GetComponent<Enemy>().GotKilled(true);
+                    hit.collider.gameObject.GetComponent<Enemy>().GotKilled();
                 }
             }
         }

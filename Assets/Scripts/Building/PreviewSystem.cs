@@ -51,6 +51,7 @@ public class PreviewSystem : MonoBehaviour
             Material[] materials = renderer.materials;
             for (int i = 0; i < materials.Length; i++)
             {
+                if (materials[i].name.StartsWith("AttackRangeRadiusMaterial")) continue;
                 materials[i] = previewMaterialInstance;
             }
             renderer.materials = materials;

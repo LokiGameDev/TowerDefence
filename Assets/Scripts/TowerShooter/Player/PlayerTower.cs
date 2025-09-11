@@ -6,6 +6,10 @@ public class PlayerTower : MonoBehaviour
 
     private int _towerHealth;
     private int _maxTowerHealth;
+    private bool _canUpgradeHealth;
+    private bool _canBuyTurrets;
+    [SerializeField]
+    private TowerShooter towerShooter;
 
     #endregion
 
@@ -15,6 +19,8 @@ public class PlayerTower : MonoBehaviour
     {
         _maxTowerHealth = 20;
         _towerHealth = 5;
+        _canUpgradeHealth = false;
+        _canBuyTurrets = false;
         UpdateTowerUI();
     }
 
@@ -24,10 +30,10 @@ public class PlayerTower : MonoBehaviour
         {
             _towerHealth--;
             UpdateTowerUI();
-            other.GetComponent<Enemy>().GotKilled(true);
+            other.GetComponent<Enemy>().GotKilled();
             if (_towerHealth <= 0)
             {
-                GameOver();
+                GameManager.Instance.WaveOver();
             }
         }
     }
@@ -38,48 +44,50 @@ public class PlayerTower : MonoBehaviour
 
     public void TowerHealthUpgrade()
     {
-        if (GameManager.Instance.Purchasing(20) && GameManager.Instance._canUpgradeHealth)
+        if (GameManager.Instance.Purchasing(20) && _canUpgradeHealth)
         {
             _maxTowerHealth++;
             UpdateTowerUI();
         }
         else if (GameManager.Instance.Purchasing(30))
         {
-            GameManager.Instance.UnlockAbility(1);
+            _canUpgradeHealth = true;
+            UIManager.Instance.AbilityUnlock(1);
         }
     }
 
     public void TowerAttackSpeedUpgrade()
     {
-        if(GameManager.Instance._playerScore >= 15 && GameManager.Instance._attackAbility)
+        if (GameManager.Instance._playerScore >= 15 && towerShooter._isAbilityUnlocked)
         {
             bool upgraded = GameObject.Find("TowerShooter").GetComponent<TowerShooter>().ReduceCollDownUpgrade();
             if (upgraded) GameManager.Instance.Purchasing(15);
             else Debug.Log("Already at max level");
         }
-        else if (!GameManager.Instance._attackAbility && GameManager.Instance.Purchasing(10))
+        else if (!towerShooter._isAbilityUnlocked && GameManager.Instance.Purchasing(10))
         {
-            GameManager.Instance.UnlockAbility(0);
+            towerShooter.UnlockAttackAbility();
+            UIManager.Instance.AbilityUnlock(0);
         }
     }
 
     public void TowerTurretUpgrade()
     {
-        if (GameManager.Instance._turretPurchase)
+        if (_canBuyTurrets)
         {
             UIManager.Instance.TurretPurchasePanel();
         }
-        else if (!GameManager.Instance._turretPurchase && GameManager.Instance.Purchasing(25))
+        else if (!_canBuyTurrets && GameManager.Instance.Purchasing(25))
         {
-            GameManager.Instance.UnlockAbility(2);
+            _canBuyTurrets = true;
+            UIManager.Instance.AbilityUnlock(2);
         }
     }
 
     #endregion
 
-    void GameOver()
+    public void GameOver()
     {
-        GameManager.Instance.WaveOver();
         _towerHealth = _maxTowerHealth;
         UpdateTowerUI();
     }

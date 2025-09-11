@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class TowerBullet : MonoBehaviour
+public class PlayerBullet : MonoBehaviour
 {
     #region Variables
 
-    private float   _bulletSpeed = 5f,
+    private float _bulletSpeed = 5f,
                     _maxMovingDistance = 30f;
     private Vector3 _spawnPos;
 
@@ -38,9 +38,14 @@ public class TowerBullet : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             GameManager.Instance.AddScore(other.GetComponent<Enemy>()._enemyValue);
-            other.GetComponent<Enemy>().GotKilled(true);
+            other.GetComponent<Enemy>().GotKilled();
             Destroy(this.gameObject);
         }
+    }
+
+    public void BulletSpeedSetUp(float speed)
+    {
+        _bulletSpeed = speed;
     }
 
     #endregion

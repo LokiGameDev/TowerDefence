@@ -34,9 +34,6 @@ public class GameManager : MonoBehaviour
     private float currentTime;
     private bool spawnWaveInterval;
     public bool isBuildMode { get; private set; } = false;
-    public bool _attackAbility { get; private set; }
-    public bool _turretPurchase { get; private set; }
-    public bool _canUpgradeHealth { get; private set; }
     public bool _isWaveStarted { get; private set; } = false;
     public bool canSpawnNextWave, willEnemySpawn;
     public SpawnManager spawnManager;
@@ -54,7 +51,6 @@ public class GameManager : MonoBehaviour
         _playerScore = 0;
         spawnWaveWaitTime = 10;
         spawnWaveInterval = false;
-        _attackAbility = false;
         canSpawnNextWave = false;
         willEnemySpawn = false;
         UIManager.Instance.UpdateUIElements();
@@ -82,7 +78,11 @@ public class GameManager : MonoBehaviour
         _isWaveStarted = false;
         _waveLevel = 0;
         _enemyCount = 0;
+        currentTime = 0;
+        spawnWaveInterval = false;
+        UIManager.Instance.UpdateWaveBar(0, false);
         spawnManager.WaveOver();
+        GameObject.Find("PlayerTower").GetComponent<PlayerTower>().GameOver();
         KillAllAvailableEnemies();
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.WaveStatus(false);
@@ -146,14 +146,6 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    public void UnlockAbility(int index)
-    {
-        if (index == 0) _attackAbility = true;
-        if (index == 2) _turretPurchase = true;
-        if (index == 1) _canUpgradeHealth = true;
-        UIManager.Instance.AbilityUnlock(index);
-    }
-
     public void AddScore(int score)
     {
         _playerScore += score;
@@ -200,7 +192,7 @@ public class GameManager : MonoBehaviour
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var ene in enemies)
         {
-            ene.GetComponent<Enemy>().GotKilled(false);
+            EnemyPool.Instance.ReturnToPool(ene.GetComponent<Enemy>());
         }
     }
 }

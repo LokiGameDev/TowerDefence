@@ -41,10 +41,10 @@ public class Enemy : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime); ;
     }
 
-    public void GotKilled(bool isScore)
+    public void GotKilled()
     {
         EnemyPool.Instance.ReturnToPool(this);
-        if(isScore) GameManager.Instance.EnemyGotDestroyed();
+        GameManager.Instance.EnemyGotDestroyed();
     }
     
     #endregion

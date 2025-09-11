@@ -65,6 +65,7 @@ public class SpawnManager : MonoBehaviour
     public void WaveOver()
     {
         _enemyCount = 0;
+        _canSpawnEnemy = true;
         StopAllCoroutines();
     }
 
