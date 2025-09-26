@@ -31,14 +31,15 @@ public class UIManager : MonoBehaviour
                 infoDisplay,
                 waveLevel;
     public Image towerHealthBar,
-                 waveBar;
+                 dayNightBar;
     public GameObject towerUpgradePanel,
                       turretPurchasePanelGameObject,
                       inventoryPanel,
                       waveModePanel,
                       menuModePanel,
                       buildModePanel,
-                      waveStartButton,
+                      skipTheNightButton,
+                      skipTheDayButton,
                       buildThingsPanel;
 
     public GameObject[] abilityLock;
@@ -57,6 +58,8 @@ public class UIManager : MonoBehaviour
         towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
         infoDisplay.gameObject.SetActive(false);
+        skipTheNightButton.SetActive(false);
+        skipTheDayButton.SetActive(true);
         foreach (var abilityLockObj in abilityLock)
         {
             abilityLockObj.SetActive(true);
@@ -76,7 +79,6 @@ public class UIManager : MonoBehaviour
     public void UpgradeButton()
     {
         if (GameManager.Instance.isBuildMode) BuildModeButton();
-        waveStartButton.SetActive(towerUpgradePanel.activeSelf);
         TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 
@@ -86,7 +88,6 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.BuildMode();
         buildThingsPanel.SetActive(GameManager.Instance.isBuildMode);
         inventoryPanel.SetActive(GameManager.Instance.isBuildMode);
-        waveStartButton.SetActive(!GameManager.Instance.isBuildMode);
     }
 
     #endregion
@@ -95,7 +96,6 @@ public class UIManager : MonoBehaviour
 
     public void TowerUpgradePanel(bool status)
     {
-        if (GameManager.Instance.IsWaveGoing()) return;
         towerUpgradePanel.SetActive(status);
         if (!status) // For return to game
         {
@@ -153,8 +153,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateWaveBar(float value, bool status)
     {
-        waveBar.gameObject.SetActive(status);
-        if (waveBar != null && status) waveBar.fillAmount = value;
+        dayNightBar.gameObject.SetActive(status);
+        if (dayNightBar != null && status) dayNightBar.fillAmount = value;
     }
 
     public void UpdateInvetory(int id, int qty)
@@ -175,6 +175,11 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    public void AllEnemiesAreCleared()
+    {
+        skipTheNightButton.SetActive(true);
+    }
+
     IEnumerator DisplayMessageCooldown()
     {
         yield return new WaitForSeconds(2);
@@ -183,8 +188,11 @@ public class UIManager : MonoBehaviour
 
     public void WaveStatus(bool status)
     {
+        skipTheDayButton.SetActive(!status);
         waveModePanel.SetActive(status);
+        if (!status) skipTheNightButton.SetActive(status);
         buildModePanel.SetActive(!status);
         menuModePanel.SetActive(!status);
+        if(status && towerUpgradePanel.activeSelf) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 }

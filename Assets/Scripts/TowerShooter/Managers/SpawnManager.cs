@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     #region Variables
 
-    private bool _canSpawnEnemy;
+    public bool _canSpawnEnemy;
     private int _enemyCount;
     private float _spawnRadius;
 
@@ -65,7 +65,6 @@ public class SpawnManager : MonoBehaviour
     public void WaveOver()
     {
         _enemyCount = 0;
-        _canSpawnEnemy = true;
         StopAllCoroutines();
     }
 
@@ -75,16 +74,16 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnTimeInterval()
     {
+        if (_enemyCount <= 0)
+        {
+            GameManager.Instance.willEnemySpawn = false;
+        }
         yield return new WaitForSeconds(1);
         _canSpawnEnemy = true;
         if (_enemyCount > 0)
         {
             _enemyCount--;
             SpawnWave();
-        }
-        else
-        {
-            GameManager.Instance.willEnemySpawn = false;
         }
     }
 

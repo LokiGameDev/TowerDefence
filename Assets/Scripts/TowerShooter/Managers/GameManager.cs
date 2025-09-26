@@ -29,16 +29,21 @@ public class GameManager : MonoBehaviour
     public int _waveLevel { get; private set; }
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
-
-    private float spawnWaveWaitTime;
+    private float dayCycleTime;
     private float currentTime;
-    private bool spawnWaveInterval;
     public bool isBuildMode { get; private set; } = false;
-    public bool _isWaveStarted { get; private set; } = false;
     public bool canSpawnNextWave, willEnemySpawn;
     public SpawnManager spawnManager;
     [SerializeField]
     private GameObject inputManager, inputManagerBuildMode;
+
+    enum DayCycle
+    {
+        DayTime,
+        NightTime,
+    }
+
+    private DayCycle currentDayCycle;
 
     #endregion
 
@@ -46,27 +51,25 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        _waveLevel = 10;
+        _waveLevel = 0;
         _enemyCount = 0;
         _playerScore = 0;
-        spawnWaveWaitTime = 10;
-        spawnWaveInterval = false;
+        dayCycleTime = 10;
         canSpawnNextWave = false;
         willEnemySpawn = false;
+        currentDayCycle = DayCycle.DayTime;
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.UpdateWaveBar(0, false);
         UIManager.Instance.WaveStatus(false);
         inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
         inputManager.GetComponent<InputManager>().enabled = true;
+        StartCoroutine(DayNightCycle());
     }
 
     void Update()
     {
-        if (spawnWaveInterval)
-        {
-            UIManager.Instance.UpdateWaveBar(currentTime / spawnWaveWaitTime, true);
-            currentTime += Time.deltaTime;
-        }
+        UIManager.Instance.UpdateWaveBar(currentTime / dayCycleTime, true);
+        currentTime += Time.deltaTime;
     }
     #endregion
 
@@ -75,12 +78,8 @@ public class GameManager : MonoBehaviour
     public void WaveOver()
     {
         StopAllCoroutines();
-        _isWaveStarted = false;
-        _waveLevel = 0;
         _enemyCount = 0;
         currentTime = 0;
-        spawnWaveInterval = false;
-        UIManager.Instance.UpdateWaveBar(0, false);
         spawnManager.WaveOver();
         GameObject.Find("PlayerTower").GetComponent<PlayerTower>().GameOver();
         KillAllAvailableEnemies();
@@ -116,11 +115,7 @@ public class GameManager : MonoBehaviour
     public void EnemyGotDestroyed()
     {
         _enemyCount--;
-        if (_enemyCount <= 0 && !willEnemySpawn)
-        {
-            currentTime = 0;
-            StartCoroutine(SpawnWaveIntervalTime());
-        }
+        if (_enemyCount == 0 && !willEnemySpawn) UIManager.Instance.AllEnemiesAreCleared();
         UIManager.Instance.UpdateUIElements();
     }
 
@@ -156,16 +151,11 @@ public class GameManager : MonoBehaviour
 
     #region Coroutines
 
-    IEnumerator SpawnWaveIntervalTime()
+    IEnumerator DayNightCycle()
     {
-        spawnWaveInterval = true;
-        UIManager.Instance.UpdateWaveBar(0, true);
-        yield return new WaitForSeconds(spawnWaveWaitTime);
-        spawnWaveInterval = false;
-        UIManager.Instance.UpdateWaveBar(0, false);
-        canSpawnNextWave = true;
-        _isWaveStarted = false;
-        StartTheWave();
+        currentTime = 0;
+        yield return new WaitForSeconds(dayCycleTime);
+        DayEnded();
     }
 
 
@@ -178,13 +168,38 @@ public class GameManager : MonoBehaviour
 
     public void StartTheWave()
     {
-        if (!_isWaveStarted)
+        UIManager.Instance.WaveStatus(true);
+        _waveLevel++;
+        spawnManager.StartTheSpawn(_waveLevel);
+    }
+
+    private void DayEnded()
+    {
+        StopCoroutine(DayNightCycle());
+        currentDayCycle = currentDayCycle == DayCycle.DayTime ? DayCycle.NightTime : DayCycle.DayTime;
+        Debug.Log(currentDayCycle);
+        if (currentDayCycle == DayCycle.NightTime)
         {
             UIManager.Instance.WaveStatus(true);
-            _waveLevel++;
-            spawnManager.StartTheSpawn(_waveLevel);
-            _isWaveStarted = true;
+            if(isBuildMode) UIManager.Instance.BuildModeButton();
+            StartTheWave();
         }
+        else
+        {
+            WaveOver();
+        }
+        StartCoroutine(DayNightCycle());
+    }
+
+    public void WaveCleared()
+    {
+        Debug.Log("Wave been cleared");
+    }
+
+    public void SkipTheDayNight()
+    {
+        StopCoroutine(DayNightCycle());
+        DayEnded();
     }
 
     private void KillAllAvailableEnemies()
