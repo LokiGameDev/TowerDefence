@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     private float dayCycleTime;
     private float currentTime;
     public bool isBuildMode { get; private set; } = false;
+    public bool _canSkip { get; private set; } = true;
     public bool canSpawnNextWave, willEnemySpawn;
     public SpawnManager spawnManager;
     [SerializeField]
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour
         _waveLevel = 0;
         _enemyCount = 0;
         _playerScore = 0;
-        dayCycleTime = 10;
+        dayCycleTime = 30;
         canSpawnNextWave = false;
         willEnemySpawn = false;
         currentDayCycle = DayCycle.DayTime;
@@ -99,12 +100,14 @@ public class GameManager : MonoBehaviour
         {
             inputManager.GetComponent<InputManager>().enabled = false;
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = true;
+            UIManager.Instance.BuildModeStatus(true);
         }
         else
         {
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().OnExitMethod();
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
             inputManager.GetComponent<InputManager>().enabled = true;
+            UIManager.Instance.BuildModeStatus(true);
         }
     }
 
@@ -170,6 +173,7 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.WaveStatus(true);
         _waveLevel++;
+        UIManager.Instance.UpdateUIElements();
         spawnManager.StartTheSpawn(_waveLevel);
     }
 
@@ -201,6 +205,8 @@ public class GameManager : MonoBehaviour
         StopCoroutine(DayNightCycle());
         DayEnded();
     }
+
+
 
     private void KillAllAvailableEnemies()
     {

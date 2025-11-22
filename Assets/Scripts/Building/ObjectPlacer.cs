@@ -10,6 +10,7 @@ public class ObjectPlacer : MonoBehaviour
     {
         GameObject playerTurret = Instantiate(prefab);
         playerTurret.transform.position = position;
+        playerTurret.GetComponent<PlayerTurret>()?.TurretUpgradeStatus(true);
         placedGameObjects.Add(playerTurret);
         return placedGameObjects.Count - 1;
     }

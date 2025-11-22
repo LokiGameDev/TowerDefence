@@ -38,8 +38,10 @@ public class UIManager : MonoBehaviour
                       waveModePanel,
                       menuModePanel,
                       buildModePanel,
+                      turretUpgradePanel,
                       skipTheNightButton,
                       skipTheDayButton,
+                      infoBox,
                       buildThingsPanel;
 
     public GameObject[] abilityLock;
@@ -57,9 +59,10 @@ public class UIManager : MonoBehaviour
     {
         towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
-        infoDisplay.gameObject.SetActive(false);
+        infoBox.SetActive(false);
         skipTheNightButton.SetActive(false);
         skipTheDayButton.SetActive(true);
+        turretUpgradePanel.SetActive(false);
         foreach (var abilityLockObj in abilityLock)
         {
             abilityLockObj.SetActive(true);
@@ -137,7 +140,21 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    public void TurretUpgradePanel(GameObject turret,bool status)
+    {
+        if(status) turretUpgradePanel.SetActive(!turretUpgradePanel.activeSelf);
+        else turretUpgradePanel.SetActive(false);
+    }
+
     #region Update UI Methods
+
+    public void BuildModeStatus(bool status)
+    {
+        if(status)
+        {
+            turretUpgradePanel.SetActive(false);
+        }
+    }
 
     public void UpdateUIElements()
     {
@@ -165,10 +182,10 @@ public class UIManager : MonoBehaviour
 
     public void DisplayInformation(string msg)
     {
-        if (!infoDisplay.gameObject.activeSelf)
+        if (!infoBox.activeSelf)
         {
             infoDisplay.text = msg;
-            infoDisplay.gameObject.SetActive(true);
+            infoBox.SetActive(true);
             StartCoroutine(DisplayMessageCooldown());
         }
     }
@@ -183,11 +200,15 @@ public class UIManager : MonoBehaviour
     IEnumerator DisplayMessageCooldown()
     {
         yield return new WaitForSeconds(2);
-        infoDisplay.gameObject.SetActive(false);
+        infoBox.SetActive(false);
     }
 
     public void WaveStatus(bool status)
     {
+        if(status)
+        {
+            turretUpgradePanel.SetActive(false);
+        }
         skipTheDayButton.SetActive(!status);
         waveModePanel.SetActive(status);
         if (!status) skipTheNightButton.SetActive(status);

@@ -1,38 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerTurret : MonoBehaviour
 {
     [SerializeField]
-    private GameObject projectilePrefab;
-    [SerializeField]
-    private float shootInterval = 1f;
-    private float _bulletSpeed = 10f;
-    [SerializeField]
-    private Transform projectileSpawnPos;
-    [SerializeField]
-    private Transform attackRangeCenter;
-    private bool canShoot;
-    private GameObject turretMesh;
+    protected float _shootInterval = 1f;
+    protected float _bulletSpeed = 10f;
+    protected float _turretHealth = 1f;
+    protected float _attackRadius;
 
-    private List<Transform> targets = new();
+    protected bool canShoot;
+    protected bool _canUpgrade;
 
-    private Transform currentTarget = null;
-    private float _attackRadius;
+    protected Transform currentTarget = null;
+    protected List<Transform> targets = new();
 
     [SerializeField]
-    private Renderer attackRangeRenderer;
+    protected Transform attackRangeCenter;
+    [SerializeField]
+    protected Renderer attackRangeRenderer;
 
-    void Start()
-    {
-        turretMesh = transform.GetChild(0).gameObject;
-        _attackRadius = 10;
-        attackRangeRenderer.material.SetFloat("Radius", _attackRadius);
-        canShoot = true;
-    }
+    #region Target methods
 
-    private void FindAllTargets()
+    protected void FindAllTargets()
     {
         targets.Clear();
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -42,7 +32,7 @@ public class PlayerTurret : MonoBehaviour
         }
     }
 
-    private void FindTheClosestTarget()
+    protected void FindTheClosestTarget()
     {
         float closestDistance = Mathf.Infinity;
         Transform closestTarget = null;
@@ -60,31 +50,55 @@ public class PlayerTurret : MonoBehaviour
         currentTarget = closestTarget;
     }
 
-    void Update()
+    #endregion
+
+    #region Common methods
+
+    void OnTriggerEnter(Collider other)
     {
-        attackRangeRenderer.material.SetVector("_Center", attackRangeCenter.position);
-        FindAllTargets();
-        FindTheClosestTarget();
-        if (currentTarget != null && currentTarget.gameObject.activeSelf)
+        if (other.CompareTag("Enemy"))
         {
-            if (Vector3.Distance(currentTarget.position, transform.position) < _attackRadius)
+            _turretHealth--;
+            if (_turretHealth <= 0)
             {
-                turretMesh.transform.LookAt(currentTarget);
-                if (canShoot)
-                {
-                    var bullet = Instantiate(projectilePrefab, projectileSpawnPos.position, projectilePrefab.transform.rotation);
-                    bullet.GetComponent<PlayerBullet>().BulletSpeedSetUp(_bulletSpeed);
-                    bullet.GetComponent<PlayerBullet>().AttackTheTarget(currentTarget.gameObject);
-                    canShoot = false;
-                    StartCoroutine(ShootCooldown());
-                }
+                canShoot = false;
+                gameObject.SetActive(false);
             }
         }
     }
 
-    IEnumerator ShootCooldown()
+    public void TurretUpgradeStatus(bool status)
     {
-        yield return new WaitForSeconds(shootInterval);
-        canShoot = true;
+        _canUpgrade = status;
     }
+
+    void OnMouseOver()
+    {
+        
+    }
+
+    void OnMouseExit()
+    {
+        
+    }
+
+    public void RepairTurret()
+    {
+        _turretHealth = 1f;
+    }
+
+    public void UpgradeTurret()
+    {
+        _shootInterval *= 0.9f;
+    }
+
+    public void UpgradeTurret(float newBulletSpeed, float newAttackRadius, float newShootInterval)
+    {
+        _bulletSpeed = newBulletSpeed;
+        _attackRadius = newAttackRadius;
+        _shootInterval = newShootInterval;
+        attackRangeRenderer.material.SetFloat("Radius", _attackRadius);
+    }
+
+    #endregion
 }

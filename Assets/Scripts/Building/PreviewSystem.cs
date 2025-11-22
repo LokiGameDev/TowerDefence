@@ -26,6 +26,7 @@ public class PreviewSystem : MonoBehaviour
     public void StartShowingPreview(GameObject prefab, Vector2Int size)
     {
         previewObject = Instantiate(prefab);
+        previewObject.GetComponent<PlayerTurret>()?.TurretUpgradeStatus(false);
         PreparePreview(previewObject);
         PrepareCursor(size);
         cellIndicatorPrefab.SetActive(true);

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -20,6 +21,11 @@ public class InputManager : MonoBehaviour
         {
             inventoryManager?.AddItem(0, 1);
         }
+        if (GameManager.Instance._canSkip)
+        {
+            if (Input.GetKeyDown(KeyCode.Space)) StartCoroutine(StartingAction());
+            if (Input.GetKeyUp(KeyCode.Space)) StopCoroutine(StartingAction());
+        }
         WaveMode();
     }
 
@@ -39,13 +45,17 @@ public class InputManager : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
-                    GameManager.Instance.AddScore(hit.collider.gameObject.GetComponent<Enemy>()._enemyValue);
-                    hit.collider.gameObject.GetComponent<Enemy>().GotKilled();
+                    hit.collider.gameObject.GetComponent<IDamagable>().GotHit();
                 }
             }
         }
     }
 
     #endregion
+
+    IEnumerator StartingAction()
+    {
+        yield return new WaitForSeconds(3);
+    }
 
 }

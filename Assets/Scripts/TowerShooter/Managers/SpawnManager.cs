@@ -27,7 +27,7 @@ public class SpawnManager : MonoBehaviour
     public void StartTheSpawn(int level)
     {
         GameManager.Instance.willEnemySpawn = true;
-        _enemyCount = level - 1;
+        _enemyCount = level*2;
         SpawnWave();
     }
 
@@ -38,6 +38,7 @@ public class SpawnManager : MonoBehaviour
             var enemy = EnemyPool.Instance.Get();
             GameManager.Instance.EnemyGotSpawned();
             enemy.gameObject.transform.position = GenerateRandomSpawnLoc();
+            _enemyCount--;
             enemy.gameObject.SetActive(true);
             _canSpawnEnemy = false;
             StartCoroutine(SpawnTimeInterval());
@@ -82,7 +83,6 @@ public class SpawnManager : MonoBehaviour
         _canSpawnEnemy = true;
         if (_enemyCount > 0)
         {
-            _enemyCount--;
             SpawnWave();
         }
     }

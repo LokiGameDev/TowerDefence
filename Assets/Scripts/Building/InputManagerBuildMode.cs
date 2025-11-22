@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -39,6 +40,7 @@ public class InputManagerBuildMode : MonoBehaviour
             OnExit?.Invoke();
             UIManager.Instance.BuildModeButton();
         }
+        
     }
 
     void OnDisable()
@@ -74,4 +76,5 @@ public class InputManagerBuildMode : MonoBehaviour
     }
 
     #endregion
+
 }
