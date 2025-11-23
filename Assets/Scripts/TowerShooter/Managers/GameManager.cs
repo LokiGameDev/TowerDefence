@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public int _waveLevel { get; private set; }
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
+    public int _playerCombo { get; private set; }
     private float dayCycleTime;
     private float currentTime;
     public bool isBuildMode { get; private set; } = false;
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
         _waveLevel = 0;
         _enemyCount = 0;
         _playerScore = 0;
+        _playerCombo = 1;
         dayCycleTime = 30;
         canSpawnNextWave = false;
         willEnemySpawn = false;
@@ -146,7 +148,8 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int score)
     {
-        _playerScore += score;
+        _playerScore += score*_playerCombo;
+        ComboChecker();
         UIManager.Instance.UpdateUIElements();
     }
 
@@ -206,14 +209,32 @@ public class GameManager : MonoBehaviour
         DayEnded();
     }
 
-
-
     private void KillAllAvailableEnemies()
     {
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var ene in enemies)
         {
             EnemyPool.Instance.ReturnToPool(ene.GetComponent<Enemy>());
+        }
+    }
+
+    private float   lastComboTime = 0;
+    [SerializeField]
+    public float _comboInterval { get; private set; }  = 1f;
+
+    public void ComboChecker()
+    {
+        if(lastComboTime + _comboInterval < Time.time)
+        {
+            lastComboTime = Time.time;
+            _playerCombo = 1;
+            UIManager.Instance.AddToCombo(_playerCombo);
+        }
+        else
+        {
+            lastComboTime = Time.time;
+            _playerCombo++;
+            UIManager.Instance.AddToCombo(_playerCombo);
         }
     }
 }

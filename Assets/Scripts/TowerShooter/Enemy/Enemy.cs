@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour, IDamagable
 
     #region Enemy Methods
 
-    public void GotHit()
+    public virtual void GotHit()
     {
         if(!isAlive) return;
         _enemyHealth--;
@@ -72,6 +72,7 @@ public class Enemy : MonoBehaviour, IDamagable
 
         foreach (var target in turrets)
         {
+            if(target.activeSelf==false) continue;
             float distance = Vector3.Distance(transform.position, target.transform.position);
             if (distance < closestDistance)
             {

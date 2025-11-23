@@ -48,8 +48,8 @@ public class TowerShooter : MonoBehaviour
         {
             transform.LookAt(target.transform);
             var bullet = Instantiate(bulletPrefab, transform.position, bulletPrefab.transform.rotation);
-            bullet.GetComponent<PlayerBullet>().BulletSpeedSetUp(_bulletSpeed);
-            bullet.GetComponent<PlayerBullet>().AttackTheTarget(target);
+            bullet.GetComponent<Bullet>().BulletSpeedSetUp(_bulletSpeed);
+            bullet.GetComponent<Bullet>().AttackTheTarget(target, "Enemy");
             _canShoot = false;
             StartCoroutine(ShootCoolDown());
         }
@@ -67,6 +67,7 @@ public class TowerShooter : MonoBehaviour
 
         foreach (var enemy in enemiesInRange)
         {
+            if(enemy==null) continue;
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
             if (minDistance > distance)
             {

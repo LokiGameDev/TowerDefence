@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class NormalTurret : PlayerTurret
+public class NormalTurret : PlayerTurret, ISpecialEffect
 {
     [SerializeField]
     protected GameObject projectilePrefab;
@@ -31,8 +31,8 @@ public class NormalTurret : PlayerTurret
                 if (canShoot)
                 {
                     var bullet = Instantiate(projectilePrefab, projectileSpawnPos.position, projectilePrefab.transform.rotation);
-                    bullet.GetComponent<PlayerBullet>().BulletSpeedSetUp(_bulletSpeed);
-                    bullet.GetComponent<PlayerBullet>().AttackTheTarget(currentTarget.gameObject);
+                    bullet.GetComponent<Bullet>().BulletSpeedSetUp(_bulletSpeed);
+                    bullet.GetComponent<Bullet>().AttackTheTarget(currentTarget.gameObject, "Enemy");
                     canShoot = false;
                     StartCoroutine(ShootCooldown());
                 }
@@ -48,7 +48,6 @@ public class NormalTurret : PlayerTurret
             UIManager.Instance.TurretUpgradePanel(this.gameObject, false);
             return;
         }
-        Debug.Log("Turret Health: " + _turretHealth);
         UIManager.Instance.TurretUpgradePanel(this.gameObject, true);
     }
 
@@ -56,5 +55,20 @@ public class NormalTurret : PlayerTurret
     {
         yield return new WaitForSeconds(_shootInterval);
         canShoot = true;
+    }
+
+    void ISpecialEffect.Stunned()
+    {
+        StopAllCoroutines();
+        canShoot=false;
+        specialEffectObject.SetActive(true);
+        if(this.gameObject.activeSelf) StartCoroutine(GotStunned());
+    }
+
+    IEnumerator GotStunned()
+    {
+        yield return new WaitForSeconds(5);
+        canShoot=true;
+        specialEffectObject.SetActive(false);
     }
 }

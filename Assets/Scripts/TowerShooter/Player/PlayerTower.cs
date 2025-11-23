@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerTower : MonoBehaviour
+public class PlayerTower : MonoBehaviour, IDamagable
 {
     #region Variables
 
@@ -34,6 +34,16 @@ public class PlayerTower : MonoBehaviour
             {
                 GameManager.Instance.WaveOver();
             }
+        }
+    }
+
+    void IDamagable.GotHit()
+    {
+        _towerHealth--;
+        UpdateTowerUI();
+        if (_towerHealth <= 0)
+        {
+            GameManager.Instance.WaveOver();
         }
     }
 
@@ -87,7 +97,7 @@ public class PlayerTower : MonoBehaviour
 
     public void GameOver()
     {
-        _towerHealth = _maxTowerHealth;
+        // _towerHealth = _maxTowerHealth;
         UpdateTowerUI();
     }
 

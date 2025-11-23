@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     public Text enemyCount,
                 playerScore,
                 infoDisplay,
+                comboText,
                 waveLevel;
     public Image towerHealthBar,
                  dayNightBar;
@@ -42,9 +43,11 @@ public class UIManager : MonoBehaviour
                       skipTheNightButton,
                       skipTheDayButton,
                       infoBox,
+                      comboBox,
                       buildThingsPanel;
 
     public GameObject[] abilityLock;
+    private GameObject currentUpgradeObject;
     [SerializeField]
     private PlayerTower playerTower;
     [SerializeField]
@@ -60,6 +63,7 @@ public class UIManager : MonoBehaviour
         towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
         infoBox.SetActive(false);
+        comboBox.SetActive(false);
         skipTheNightButton.SetActive(false);
         skipTheDayButton.SetActive(true);
         turretUpgradePanel.SetActive(false);
@@ -69,6 +73,14 @@ public class UIManager : MonoBehaviour
         }
         turretPurchasePanelGameObject.SetActive(false);
         buildThingsPanel.SetActive(false);
+    }
+
+    void Update()
+    {
+        if(towerUpgradePanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        {
+            TowerUpgradePanel(false);
+        }
     }
     #endregion
 
@@ -142,8 +154,17 @@ public class UIManager : MonoBehaviour
 
     public void TurretUpgradePanel(GameObject turret,bool status)
     {
-        if(status) turretUpgradePanel.SetActive(!turretUpgradePanel.activeSelf);
-        else turretUpgradePanel.SetActive(false);
+        if(currentUpgradeObject == turret)
+        {
+            if(status) turretUpgradePanel.SetActive(!turretUpgradePanel.activeSelf);
+            else turretUpgradePanel.SetActive(false);
+        }
+        else
+        {
+            if(status) turretUpgradePanel.SetActive(true);
+            else turretUpgradePanel.SetActive(false);
+            currentUpgradeObject = turret;
+        }
     }
 
     #region Update UI Methods
@@ -184,13 +205,48 @@ public class UIManager : MonoBehaviour
     {
         if (!infoBox.activeSelf)
         {
-            infoDisplay.text = msg;
             infoBox.SetActive(true);
+            infoDisplay.text = msg;
             StartCoroutine(DisplayMessageCooldown());
+        }
+        else
+        {
+            infoDisplay.text = msg;
         }
     }
 
     #endregion
+
+    private Coroutine comboCoroutine;
+    public void AddToCombo(int value)
+    {
+        if(!comboBox.activeSelf) comboBox.SetActive(true);
+        comboText.text = "+" + value + " Combo";
+        if(comboCoroutine!=null)
+        {
+            comboBox.GetComponent<CanvasGroup>().alpha = 1;
+            StopCoroutine(comboCoroutine);
+        }
+        comboCoroutine = StartCoroutine(FadeOutCombo());
+    }
+
+    IEnumerator FadeOutCombo()
+    {
+        yield return new WaitForSeconds(GameManager.Instance._comboInterval);
+
+        float duration = 0.5f;
+        float t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            comboBox.GetComponent<CanvasGroup>().alpha = 1f - (t / duration);
+            yield return null;
+        }
+
+        comboBox.GetComponent<CanvasGroup>().alpha = 0f;
+        comboBox.SetActive(false);
+    }
 
     public void AllEnemiesAreCleared()
     {
@@ -200,7 +256,7 @@ public class UIManager : MonoBehaviour
     IEnumerator DisplayMessageCooldown()
     {
         yield return new WaitForSeconds(2);
-        infoBox.SetActive(false);
+        infoBox.gameObject.SetActive(false);
     }
 
     public void WaveStatus(bool status)

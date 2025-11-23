@@ -1,11 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTurret : MonoBehaviour
+public class PlayerTurret : MonoBehaviour, IDamagable
 {
     [SerializeField]
     protected float _shootInterval = 1f;
     protected float _bulletSpeed = 10f;
+    [SerializeField]
     protected float _turretHealth = 1f;
     protected float _attackRadius;
 
@@ -19,6 +21,8 @@ public class PlayerTurret : MonoBehaviour
     protected Transform attackRangeCenter;
     [SerializeField]
     protected Renderer attackRangeRenderer;
+    [SerializeField]
+    protected GameObject specialEffectObject;
 
     #region Target methods
 
@@ -64,6 +68,16 @@ public class PlayerTurret : MonoBehaviour
                 canShoot = false;
                 gameObject.SetActive(false);
             }
+        }
+    }
+
+    void IDamagable.GotHit()
+    {
+        _turretHealth--;
+        if (_turretHealth <= 0)
+        {
+            canShoot = false;
+            gameObject.SetActive(false);
         }
     }
 

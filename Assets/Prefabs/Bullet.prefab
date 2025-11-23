@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1804612271868504745}
   - component: {fileID: 4621816614381161474}
   m_Layer: 0
-  m_Name: Tower bullet
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
