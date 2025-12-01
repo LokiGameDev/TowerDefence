@@ -9,6 +9,7 @@ public class CameraMovement : MonoBehaviour
                     rotationSpeed = 5f,
                     minY = 4f,
                     maxY,
+                    pivotMoveSpeed,
                     maxZoom = 35f;
 
     [SerializeField]
@@ -16,6 +17,10 @@ public class CameraMovement : MonoBehaviour
 
     #endregion
 
+    void Start()
+    {
+        GameManager.Instance.onModeChange.AddListener(SetPivotToOrigin);
+    }
     void Update()
     {
         if (((Input.GetAxis("Mouse ScrollWheel") != 0 && transform.position.y > minY) || Input.GetAxis("Mouse ScrollWheel") < 0 && transform.position.y <= minY)
@@ -42,6 +47,21 @@ public class CameraMovement : MonoBehaviour
             }
             
         }
+        if(!GameManager.Instance.IsWaveGoing() && !GameManager.Instance.isBuildMode)
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
 
+            Vector3 direction = transform.right * horizontal + transform.forward * vertical;
+            direction.y = 0;
+
+            pivot.position += direction.normalized * pivotMoveSpeed * Time.deltaTime;
+        }
+
+    }
+
+    public void SetPivotToOrigin()
+    {
+        pivot.position = new Vector3(0,0,0);
     }
 }

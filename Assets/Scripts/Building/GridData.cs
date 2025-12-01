@@ -18,6 +18,20 @@ public class GridData
             }
             placedObjectsData[position] = placementData;
         }
+        GameManager.Instance.SaveTheGridData(placementData);
+    }
+
+    public void AddExistingObjectAt(List<Vector3Int> positionsToOccupy, int id, int placedObjectIndex)
+    {
+        PlacementData placementData = new(positionsToOccupy, id, placedObjectIndex);
+        foreach (var position in positionsToOccupy)
+        {
+            // if (placedObjectsData.ContainsKey(position))
+            // {
+            //     throw new Exception($"Cell {position} is already occupied.");
+            // }
+            placedObjectsData[position] = placementData;
+        }
     }
 
     private List<Vector3Int> CalculatePositions(Vector3Int gridPosition, Vector2 objectSize)
@@ -74,8 +88,11 @@ public class GridData
             placedObjectsData.Remove(position);
         }
     }
+
+   
 }
 
+[Serializable]
 public class PlacementData
 {
     public List<Vector3Int> occupiedCells;

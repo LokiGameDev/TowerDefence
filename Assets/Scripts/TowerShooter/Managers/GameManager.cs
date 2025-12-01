@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -38,6 +40,8 @@ public class GameManager : MonoBehaviour
     public SpawnManager spawnManager;
     [SerializeField]
     private GameObject inputManager, inputManagerBuildMode;
+    public GridDataSaver gridDataSaver;
+    public InventoryManager inventoryManager;
 
     enum DayCycle
     {
@@ -67,6 +71,7 @@ public class GameManager : MonoBehaviour
         inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
         inputManager.GetComponent<InputManager>().enabled = true;
         StartCoroutine(DayNightCycle());
+        LoadTheGridData();
     }
 
     void Update()
@@ -103,6 +108,7 @@ public class GameManager : MonoBehaviour
             inputManager.GetComponent<InputManager>().enabled = false;
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = true;
             UIManager.Instance.BuildModeStatus(true);
+            ModeChanged();
         }
         else
         {
@@ -178,6 +184,7 @@ public class GameManager : MonoBehaviour
         _waveLevel++;
         UIManager.Instance.UpdateUIElements();
         spawnManager.StartTheSpawn(_waveLevel);
+        ModeChanged();
     }
 
     private void DayEnded()
@@ -218,6 +225,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public UnityEvent onModeChange;
+
+    void ModeChanged()
+    {
+        onModeChange?.Invoke();
+    }
+
     private float   lastComboTime = 0;
     [SerializeField]
     public float _comboInterval { get; private set; }  = 1f;
@@ -236,5 +250,25 @@ public class GameManager : MonoBehaviour
             _playerCombo++;
             UIManager.Instance.AddToCombo(_playerCombo);
         }
+    }
+
+    public void SaveTheGridData(PlacementData placementData)
+    {
+        gridDataSaver.SaveGridData(placementData);
+    }
+
+    public void RemoveObjectFromData(int gameObjectIndex)
+    {
+        gridDataSaver.RemoveObjectFromSavedData(gameObjectIndex);
+    }
+
+    public void ClearSavedGridData()
+    {
+        gridDataSaver.ClearSavedData();
+    }
+
+    public void LoadTheGridData()
+    {
+        gridDataSaver.LoadTheGridData();
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -5806820928625896507}
   - component: {fileID: 6530590988853374816}
   - component: {fileID: -1789569936469468880}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerTurret
   m_TagString: PlayerTurret
   m_Icon: {fileID: 0}
@@ -48,11 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6df56e6abfb99c49a440bfe21bb56d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 8574612312814285533, guid: dc515e07cb9662c44adbe77e117013ea, type: 3}
-  shootInterval: 3
-  projectileSpawnPos: {fileID: 174381168863177274}
+  _shootInterval: 1
+  _turretHealth: 1
   attackRangeCenter: {fileID: 8041877377835731192}
   attackRangeRenderer: {fileID: 2766565313204070224}
+  specialEffectObject: {fileID: 0}
 --- !u!65 &6530590988853374816
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 174381168863177274}
   - component: {fileID: 9189106415270655687}
   - component: {fileID: 2015464915491372374}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 8041877377835731192}
   - component: {fileID: 4463196755294750869}
   - component: {fileID: 8522483433451378303}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TurretObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 3729086711172495028}
   - component: {fileID: 2766565313204070224}
   - component: {fileID: 2860373360373710495}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

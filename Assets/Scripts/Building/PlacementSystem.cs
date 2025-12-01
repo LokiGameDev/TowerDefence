@@ -10,23 +10,20 @@ public class PlacementSystem : MonoBehaviour
     private GameObject gridLineVisual;
     [SerializeField]
     private InputManagerBuildMode inputManagerBuildMode;
-    [SerializeField]
-    private Grid grid;
+    public Grid grid;
 
     [SerializeField]
     private ObjectsDatabaseSO database;
 
     private bool isBuildMode = false;
 
-    private GridData gridData;
+    public GridData gridData;
 
     [SerializeField]
     private PreviewSystem previewSystem;
 
     private Vector3Int lastValidPosition = Vector3Int.zero;
-
-    [SerializeField]
-    private ObjectPlacer objectPlacer;
+    public ObjectPlacer objectPlacer;
 
     [SerializeField]
     private InventoryManager inventoryManager;

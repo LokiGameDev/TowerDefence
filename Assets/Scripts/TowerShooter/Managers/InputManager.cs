@@ -26,6 +26,14 @@ public class InputManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space)) StartCoroutine(StartingAction());
             if (Input.GetKeyUp(KeyCode.Space)) StopCoroutine(StartingAction());
         }
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            mainCamera.GetComponent<CameraMovement>().SetPivotToOrigin();
+        }
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            GameManager.Instance.ClearSavedGridData();
+        }
         WaveMode();
     }
 

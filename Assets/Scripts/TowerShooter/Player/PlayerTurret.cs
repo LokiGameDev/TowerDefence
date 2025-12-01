@@ -74,6 +74,7 @@ public class PlayerTurret : MonoBehaviour, IDamagable
     void IDamagable.GotHit()
     {
         _turretHealth--;
+        Debug.Log("Hit");
         if (_turretHealth <= 0)
         {
             canShoot = false;
