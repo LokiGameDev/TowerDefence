@@ -7,12 +7,10 @@ public class TowerShooter : MonoBehaviour
 
     #region Variables
 
-    public bool _isAbilityUnlocked { get; private set; }
     private bool _canShoot;
     private float _bulletSpeed = 5f;
-    private float _shootCoolDown, _minShootCoolDown = 1;
+    public PlayerTower playerTower;
     public GameObject bulletPrefab;
-    private List<GameObject> enemiesInRange = new List<GameObject>();
 
     #endregion
 
@@ -20,31 +18,13 @@ public class TowerShooter : MonoBehaviour
 
     void Start()
     {
-        _shootCoolDown = 5;
         _canShoot = true;
-        _isAbilityUnlocked = false;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            enemiesInRange.Add(other.gameObject);
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            enemiesInRange.Remove(other.gameObject);
-        }
     }
 
     void Update()
     {
-        var target = GetClosestEnemy();
-        if (target != null && target.activeSelf && _canShoot && _isAbilityUnlocked)
+        var target = FindClosestTargetInRange();
+        if (target != null && target.activeSelf && _canShoot)
         {
             transform.LookAt(target.transform);
             var bullet = Instantiate(bulletPrefab, transform.position, bulletPrefab.transform.rotation);
@@ -59,11 +39,24 @@ public class TowerShooter : MonoBehaviour
 
     #region Custom Methods
 
-    GameObject GetClosestEnemy()
+    private GameObject FindClosestTargetInRange()
     {
         GameObject closestEnemy = null;
 
-        float minDistance = 35f;
+        float minDistance = Mathf.Infinity;
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        List<GameObject> enemiesInRange = new List<GameObject>();
+
+        foreach (var enemy in enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance <= playerTower._shooterRange)
+            {
+                enemiesInRange.Add(enemy);
+            }
+        }
 
         foreach (var enemy in enemiesInRange)
         {
@@ -81,30 +74,11 @@ public class TowerShooter : MonoBehaviour
 
     #endregion
 
-    #region Upgrade Methods
-
-    public bool ReduceCollDownUpgrade()
-    {
-        if (_shootCoolDown <= _minShootCoolDown) return false;
-        else
-        {
-            _shootCoolDown -= 1;
-            return true;
-        }
-    }
-
-    public void UnlockAttackAbility()
-    {
-        _isAbilityUnlocked = true;
-    }
-
-    #endregion
-
     #region Coroutines
 
     IEnumerator ShootCoolDown()
     {
-        yield return new WaitForSeconds(_shootCoolDown);
+        yield return new WaitForSeconds(playerTower._fireRate);
         _canShoot = true;
     }
     

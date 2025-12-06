@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class UIManager : MonoBehaviour
                 infoDisplay,
                 comboText,
                 waveLevel;
+    public TMP_Text shopCoin;
     public Image towerHealthBar,
                  dayNightBar;
     public GameObject towerUpgradePanel,
@@ -94,7 +96,8 @@ public class UIManager : MonoBehaviour
     public void UpgradeButton()
     {
         if (GameManager.Instance.isBuildMode) BuildModeButton();
-        TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+        //TowerUpgradePanel(!towerUpgradePanel.activeSelf);
+        GameManager.Instance.OpenShop();
     }
 
     public void BuildModeButton()
@@ -122,20 +125,20 @@ public class UIManager : MonoBehaviour
 
     public void TowerUpgradeButtons(int ID)
     {
-        switch (ID)
-        {
-            case 0:
-                playerTower.TowerHealthUpgrade();
-                break;
-            case 1:
-                playerTower.TowerAttackSpeedUpgrade();
-                break;
-            case 2:
-                playerTower.TowerTurretUpgrade();
-                break;
-            default:
-                break;
-        }
+        // switch (ID)
+        // {
+        //     case 0:
+        //         playerTower.TowerHealthUpgrade();
+        //         break;
+        //     case 1:
+        //         playerTower.TowerAttackSpeedUpgrade();
+        //         break;
+        //     case 2:
+        //         playerTower.TowerTurretUpgrade();
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 
     public void AbilityUnlock(int index)
@@ -181,7 +184,9 @@ public class UIManager : MonoBehaviour
     {
         if (enemyCount != null) enemyCount.text = "" + GameManager.Instance._enemyCount;
         if (playerScore != null) playerScore.text = "" + GameManager.Instance._playerScore;
+        if (shopCoin != null) shopCoin.text = "" + GameManager.Instance._playerScore;
         if (waveLevel != null) waveLevel.text = "" + GameManager.Instance._waveLevel;
+        GameManager.Instance.SaveCurrentPlayerData();
     }
 
     public void UpdateTowerDetails(float towerHealth)
@@ -199,6 +204,7 @@ public class UIManager : MonoBehaviour
     {
         if (id < 0 || id >= inventoryTexts.Length) return;
         inventoryTexts[id].text = qty.ToString();
+        GameManager.Instance.SaveCurrentPlayerData();
     }
 
     public void DisplayInformation(string msg)

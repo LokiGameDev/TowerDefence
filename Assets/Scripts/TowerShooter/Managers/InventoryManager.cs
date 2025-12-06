@@ -52,4 +52,13 @@ public class InventoryManager : MonoBehaviour
     {
         return new Dictionary<int, int>(items);
     }
+
+    public void LoadItems(Dictionary<int, int> loadedItems)
+    {
+        items = new Dictionary<int, int>(loadedItems);
+        foreach (var item in items)
+        {
+            UIManager.Instance.UpdateInvetory(item.Key, item.Value);
+        }
+    }
 }

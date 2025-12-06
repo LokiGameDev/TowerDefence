@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
     public int _playerCombo { get; private set; }
+    public int saveIndex { get; private set;} = 0;
     private float dayCycleTime;
     private float currentTime;
     public bool isBuildMode { get; private set; } = false;
@@ -39,9 +40,10 @@ public class GameManager : MonoBehaviour
     public bool canSpawnNextWave, willEnemySpawn;
     public SpawnManager spawnManager;
     [SerializeField]
-    private GameObject inputManager, inputManagerBuildMode;
+    private GameObject inputManager, inputManagerBuildMode, _playerTower;
     public GridDataSaver gridDataSaver;
     public InventoryManager inventoryManager;
+    public ShopManager shopManager;
 
     enum DayCycle
     {
@@ -57,9 +59,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        _waveLevel = 0;
+        InitializeSavedData();
         _enemyCount = 0;
-        _playerScore = 0;
         _playerCombo = 1;
         dayCycleTime = 30;
         canSpawnNextWave = false;
@@ -71,7 +72,6 @@ public class GameManager : MonoBehaviour
         inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
         inputManager.GetComponent<InputManager>().enabled = true;
         StartCoroutine(DayNightCycle());
-        LoadTheGridData();
     }
 
     void Update()
@@ -141,6 +141,7 @@ public class GameManager : MonoBehaviour
         if (_playerScore >= value)
         {
             _playerScore -= value;
+            Debug.Log("Purchased Item for " + value);
             UIManager.Instance.UpdateUIElements();
             return true;
         }
@@ -154,8 +155,8 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int score)
     {
-        _playerScore += score*_playerCombo;
         ComboChecker();
+        _playerScore += score*_playerCombo;
         UIManager.Instance.UpdateUIElements();
     }
 
@@ -207,7 +208,7 @@ public class GameManager : MonoBehaviour
 
     public void WaveCleared()
     {
-        Debug.Log("Wave been cleared");
+        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
     }
 
     public void SkipTheDayNight()
@@ -270,5 +271,56 @@ public class GameManager : MonoBehaviour
     public void LoadTheGridData()
     {
         gridDataSaver.LoadTheGridData();
+    }
+
+    public void SaveCurrentPlayerData()
+    {
+        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+    }
+
+    public PlayerData NeedAllDataToSave()
+    {
+        return new PlayerData(
+            GameObject.Find("PlayerTower").GetComponent<PlayerTower>().GetTowerHealth(),
+            _playerScore,
+            _waveLevel,
+            inventoryManager.GetAllItems(),
+            new List<bool>()
+        );
+    }
+
+
+    public void InitializeSavedData()
+    {
+        PlayerData data = PlayerDataSaver.LoadPlayerData();
+        if (data == null)
+        {
+            _playerScore = 0;
+            _waveLevel = 0;
+            _playerTower.GetComponent<PlayerTower>().SetMaxTowerHealth();
+            inventoryManager.LoadItems(new Dictionary<int, int>());
+            PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+            return;
+        }
+        _playerScore = data.playerScore;
+        _waveLevel = data.waveNumber;
+        _playerTower.GetComponent<PlayerTower>().SetTowerHealth(data.towerHealth);
+        inventoryManager.LoadItems(data.inventoryItems);
+    }
+
+    public void ReduceInventory()
+    {
+        inventoryManager.RemoveItem(0, 1);
+    }
+
+    public void ReduceScoreToZero()
+    {
+        _playerScore = 0;
+        UIManager.Instance.UpdateUIElements();
+    }
+
+    public void OpenShop()
+    {
+        shopManager.ShopPanelActivate();
     }
 }

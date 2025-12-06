@@ -34,6 +34,14 @@ public class InputManager : MonoBehaviour
         {
             GameManager.Instance.ClearSavedGridData();
         }
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            GameManager.Instance.ReduceInventory();
+        }
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            GameManager.Instance.ReduceScoreToZero();
+        }
         WaveMode();
     }
 

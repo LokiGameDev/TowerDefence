@@ -12,6 +12,7 @@ public class GridDataSaver : MonoBehaviour
     {
         placementSystem.gridData = new GridData();
         placedObjectsData = Load();
+        GameManager.Instance.LoadTheGridData();
     }
 
     public void LoadTheGridData()
@@ -55,7 +56,6 @@ public class GridDataSaver : MonoBehaviour
         {
             if (placedObjectsData[i].PlacedObjectIndex == gameObjectIndex)
             {
-                GameManager.Instance.inventoryManager.AddItem(placedObjectsData[i].ID, 1);
                 placedObjectsData.RemoveAt(i);
             }
         }
@@ -77,7 +77,7 @@ public class GridDataSaver : MonoBehaviour
         }
 
         string json = JsonUtility.ToJson(saveFile, true);
-        System.IO.File.WriteAllText(Application.persistentDataPath + "/save.json", json);
+        System.IO.File.WriteAllText(Application.persistentDataPath + "/buildingData.json", json);
 
         Debug.Log("Saved!");
     }
@@ -85,7 +85,7 @@ public class GridDataSaver : MonoBehaviour
 
     public List<PlacementData> Load()
     {
-        string path = Application.persistentDataPath + "/save.json";
+        string path = Application.persistentDataPath + "/buildingData.json";
         if (!System.IO.File.Exists(path)) return new List<PlacementData>();
 
         string json = System.IO.File.ReadAllText(path);
@@ -97,6 +97,7 @@ public class GridDataSaver : MonoBehaviour
         foreach (var entry in saveFile.entries)
         {
             loadedDict.Add(new PlacementData(entry.occupiedCells, entry.ID, entry.PlacedObjectIndex));
+            Debug.Log(entry.PlacedObjectIndex);
         }
 
         Debug.Log("Loaded!");

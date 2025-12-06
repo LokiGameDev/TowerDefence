@@ -4,10 +4,11 @@ public class PlayerTower : MonoBehaviour, IDamagable
 {
     #region Variables
 
-    private int _towerHealth;
-    private int _maxTowerHealth;
-    private bool _canUpgradeHealth;
-    private bool _canBuyTurrets;
+    private int _towerHealth,
+                _maxTowerHealth;
+    public float _fireRate { get ; private set; }
+    public float _shooterRange { get; private set; }
+    public float _bulletDamage { get; private set; }
     [SerializeField]
     private TowerShooter towerShooter;
 
@@ -17,10 +18,11 @@ public class PlayerTower : MonoBehaviour, IDamagable
 
     void Start()
     {
-        _maxTowerHealth = 20;
         _towerHealth = 20;
-        _canUpgradeHealth = false;
-        _canBuyTurrets = false;
+        _maxTowerHealth = 20;
+        _fireRate = 5f;
+        _shooterRange = 10f;
+        _bulletDamage = 1f;
         UpdateTowerUI();
     }
 
@@ -53,44 +55,36 @@ public class PlayerTower : MonoBehaviour, IDamagable
 
     public void TowerHealthUpgrade()
     {
-        if (GameManager.Instance.Purchasing(20) && _canUpgradeHealth)
-        {
-            _maxTowerHealth++;
-            UpdateTowerUI();
-        }
-        else if (GameManager.Instance.Purchasing(30))
-        {
-            _canUpgradeHealth = true;
-            UIManager.Instance.AbilityUnlock(1);
-        }
+        _maxTowerHealth += 10;
+        _towerHealth += _maxTowerHealth;
+        UpdateTowerUI();
+        DebugForCheck();
     }
 
-    public void TowerAttackSpeedUpgrade()
+    public void TowerFireRateUpgrade()
     {
-        if (GameManager.Instance._playerScore >= 15 && towerShooter._isAbilityUnlocked)
+        if (_fireRate > 0.5f)
         {
-            bool upgraded = GameObject.Find("TowerShooter").GetComponent<TowerShooter>().ReduceCollDownUpgrade();
-            if (upgraded) GameManager.Instance.Purchasing(15);
-            else Debug.Log("Already at max level");
+            _fireRate -= 0.25f;
         }
-        else if (!towerShooter._isAbilityUnlocked && GameManager.Instance.Purchasing(10))
-        {
-            towerShooter.UnlockAttackAbility();
-            UIManager.Instance.AbilityUnlock(0);
-        }
+        DebugForCheck();
     }
 
-    public void TowerTurretUpgrade()
+    public void TowerDamageUpgrade()
     {
-        if (_canBuyTurrets)
-        {
-            UIManager.Instance.TurretPurchasePanel();
-        }
-        else if (!_canBuyTurrets && GameManager.Instance.Purchasing(25))
-        {
-            _canBuyTurrets = true;
-            UIManager.Instance.AbilityUnlock(2);
-        }
+        _bulletDamage += 1f;
+        DebugForCheck();
+    }
+
+    public void TowerRangeUpgrade()
+    {
+        _shooterRange += 1f;
+        DebugForCheck();
+    }
+
+    public void DebugForCheck()
+    {
+        Debug.Log("Tower Upgraded");
     }
 
     #endregion
@@ -104,5 +98,22 @@ public class PlayerTower : MonoBehaviour, IDamagable
     void UpdateTowerUI()
     {
         UIManager.Instance.UpdateTowerDetails((float)_towerHealth / _maxTowerHealth);
+    }
+
+    public int GetTowerHealth()
+    {
+        return _towerHealth;
+    }
+
+    public void SetTowerHealth(int health)
+    {
+        _towerHealth = health;
+        UpdateTowerUI();
+    }
+
+    public void SetMaxTowerHealth()
+    {
+        _towerHealth = _maxTowerHealth;
+        UpdateTowerUI();
     }
 }

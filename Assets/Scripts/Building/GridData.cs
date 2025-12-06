@@ -26,10 +26,10 @@ public class GridData
         PlacementData placementData = new(positionsToOccupy, id, placedObjectIndex);
         foreach (var position in positionsToOccupy)
         {
-            // if (placedObjectsData.ContainsKey(position))
-            // {
-            //     throw new Exception($"Cell {position} is already occupied.");
-            // }
+            if (placedObjectsData.ContainsKey(position))
+            {
+                throw new Exception($"Cell {position} is already occupied.");
+            }
             placedObjectsData[position] = placementData;
         }
     }

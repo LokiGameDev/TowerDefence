@@ -13,11 +13,19 @@ MonoBehaviour:
   m_Name: ObjectsDatabase
   m_EditorClassIdentifier: 
   objectsData:
-  - <Name>k__BackingField: Turret
+  - <Name>k__BackingField: Normal Turret
     <ID>k__BackingField: 0
     <size>k__BackingField: {x: 3, y: 3}
     <prefab>k__BackingField: {fileID: 3476268298078996183, guid: 4dbc630237f8818498d18f97885cf8ce, type: 3}
-  - <Name>k__BackingField: Blocker
+  - <Name>k__BackingField: Slower
     <ID>k__BackingField: 1
-    <size>k__BackingField: {x: 1, y: 1}
-    <prefab>k__BackingField: {fileID: 2056488359552173249, guid: 8b72ab6e6f651dd4fb0bac9a2400a4ff, type: 3}
+    <size>k__BackingField: {x: 3, y: 3}
+    <prefab>k__BackingField: {fileID: 3476268298078996183, guid: 4dbc630237f8818498d18f97885cf8ce, type: 3}
+  - <Name>k__BackingField: Stunner
+    <ID>k__BackingField: 2
+    <size>k__BackingField: {x: 3, y: 3}
+    <prefab>k__BackingField: {fileID: 3476268298078996183, guid: 4dbc630237f8818498d18f97885cf8ce, type: 3}
+  - <Name>k__BackingField: Area Damager
+    <ID>k__BackingField: 3
+    <size>k__BackingField: {x: 3, y: 3}
+    <prefab>k__BackingField: {fileID: 3476268298078996183, guid: 4dbc630237f8818498d18f97885cf8ce, type: 3}
