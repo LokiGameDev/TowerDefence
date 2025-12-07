@@ -10,6 +10,7 @@ public class PlayerTurret : MonoBehaviour, IDamagable
     [SerializeField]
     protected float _turretHealth = 1f;
     protected float _attackRadius;
+    protected int _turretDamage = 10;
 
     protected bool canShoot;
     protected bool _canUpgrade;
@@ -97,6 +98,21 @@ public class PlayerTurret : MonoBehaviour, IDamagable
         
     }
 
+    public void InitialiseTurretData(int turretID)
+    {
+        TurretData turretData = GameManager.Instance.GetTurretData(turretID);
+        if(turretData == null)
+        {
+            Debug.LogError("Turret Data not found for Turret ID: " + turretID);
+            return;
+        }
+        _turretHealth = turretData.health;
+        _turretDamage = turretData.damage;
+        _shootInterval = turretData.fireRate;
+        _attackRadius = turretData.range;
+        attackRangeRenderer.material.SetFloat("Radius", _attackRadius);
+    }
+    
     public void RepairTurret()
     {
         _turretHealth = 1f;

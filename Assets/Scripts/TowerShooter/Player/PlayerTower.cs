@@ -76,9 +76,8 @@ public class PlayerTower : MonoBehaviour, IDamagable
         DebugForCheck();
     }
 
-    public void TowerRangeUpgrade()
+    public void TowerProductivityUpgrade()
     {
-        _shooterRange += 1f;
         DebugForCheck();
     }
 

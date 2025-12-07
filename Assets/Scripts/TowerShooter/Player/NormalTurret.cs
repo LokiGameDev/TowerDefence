@@ -15,7 +15,9 @@ public class NormalTurret : PlayerTurret, ISpecialEffect
         turretMesh = transform.GetChild(0).gameObject;
         _attackRadius = 10;
         attackRangeRenderer.material.SetFloat("Radius", _attackRadius);
+        InitialiseTurretData(0);
         canShoot = true;
+        ShopManager.turretUpgradeEvent += UpgradeTurretData;
     }
 
     void Update()
@@ -39,16 +41,10 @@ public class NormalTurret : PlayerTurret, ISpecialEffect
             }
         }
     }
-    
-    void OnMouseDown()
+
+    public void UpgradeTurretData()
     {
-        if(GameManager.Instance.isBuildMode || GameManager.Instance.IsWaveGoing()) return;
-        if(!_canUpgrade)
-        {
-            UIManager.Instance.TurretUpgradePanel(this.gameObject, false);
-            return;
-        }
-        UIManager.Instance.TurretUpgradePanel(this.gameObject, true);
+        InitialiseTurretData(0);
     }
 
     IEnumerator ShootCooldown()

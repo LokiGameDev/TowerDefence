@@ -23,6 +23,7 @@ public class CameraMovement : MonoBehaviour
     }
     void Update()
     {
+        if(GameManager.Instance.MenuPanelStatus()) return;
         if (((Input.GetAxis("Mouse ScrollWheel") != 0 && transform.position.y > minY) || Input.GetAxis("Mouse ScrollWheel") < 0 && transform.position.y <= minY)
                 && (Vector3.Distance(transform.position, pivot.position) < maxZoom ||
                     (Vector3.Distance(transform.position, pivot.position) > maxZoom && Input.GetAxis("Mouse ScrollWheel") > 0)))

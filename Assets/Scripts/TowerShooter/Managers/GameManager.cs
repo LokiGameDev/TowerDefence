@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
 
     #region Variables
 
-    public int _waveLevel { get; private set; }
+    public int _savedDayCount { get; private set; }
+    public int _currentDayCount { get; private set; }
     public int _enemyCount { get; private set; }
     public int _playerScore { get; private set; }
     public int _playerCombo { get; private set; }
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
         inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = false;
         inputManager.GetComponent<InputManager>().enabled = true;
         StartCoroutine(DayNightCycle());
+        UnlockPurchaseItemsDayCheck();
     }
 
     void Update()
@@ -89,6 +91,8 @@ public class GameManager : MonoBehaviour
         _enemyCount = 0;
         currentTime = 0;
         spawnManager.WaveOver();
+        _savedDayCount++;
+        UnlockPurchaseItemsDayCheck();
         GameObject.Find("PlayerTower").GetComponent<PlayerTower>().GameOver();
         KillAllAvailableEnemies();
         UIManager.Instance.UpdateUIElements();
@@ -160,6 +164,15 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateUIElements();
     }
 
+    public void UnlockPurchaseItemsDayCheck()
+    {
+        Debug.Log("1");
+        if(_savedDayCount>=5) shopManager.UnlockTurretPurchaseItem(0);
+        if(_savedDayCount>=10) shopManager.UnlockTurretPurchaseItem(0);
+        if(_savedDayCount>=15) shopManager.UnlockTurretPurchaseItem(0);
+        if(_savedDayCount>=20) shopManager.UnlockTurretPurchaseItem(0);
+    }
+
     #endregion
 
     #region Coroutines
@@ -182,9 +195,10 @@ public class GameManager : MonoBehaviour
     public void StartTheWave()
     {
         UIManager.Instance.WaveStatus(true);
-        _waveLevel++;
+        if(shopManager.ShopStatus()) shopManager.ShopPanelActivate();
+        _currentDayCount++;
         UIManager.Instance.UpdateUIElements();
-        spawnManager.StartTheSpawn(_waveLevel);
+        spawnManager.StartTheSpawn(_currentDayCount);
         ModeChanged();
     }
 
@@ -283,7 +297,7 @@ public class GameManager : MonoBehaviour
         return new PlayerData(
             GameObject.Find("PlayerTower").GetComponent<PlayerTower>().GetTowerHealth(),
             _playerScore,
-            _waveLevel,
+            _savedDayCount,
             inventoryManager.GetAllItems(),
             new List<bool>()
         );
@@ -296,14 +310,16 @@ public class GameManager : MonoBehaviour
         if (data == null)
         {
             _playerScore = 0;
-            _waveLevel = 0;
+            _currentDayCount = 0;
+            _savedDayCount = 0;
             _playerTower.GetComponent<PlayerTower>().SetMaxTowerHealth();
             inventoryManager.LoadItems(new Dictionary<int, int>());
             PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
             return;
         }
         _playerScore = data.playerScore;
-        _waveLevel = data.waveNumber;
+        _currentDayCount = data.waveNumber;
+        _savedDayCount = data.waveNumber;
         _playerTower.GetComponent<PlayerTower>().SetTowerHealth(data.towerHealth);
         inventoryManager.LoadItems(data.inventoryItems);
     }
@@ -322,5 +338,20 @@ public class GameManager : MonoBehaviour
     public void OpenShop()
     {
         shopManager.ShopPanelActivate();
+    }
+
+    public TurretData GetTurretData(int turretID)
+    {
+        TurretSaveData allTurretData = shopManager.GetCurrentTurretData();
+        if(allTurretData == null)
+        {
+            return null;
+        }
+        return allTurretData.turrets[turretID];
+    }
+
+    public bool MenuPanelStatus()
+    {
+        return shopManager.ShopStatus();
     }
 }

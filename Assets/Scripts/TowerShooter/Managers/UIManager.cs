@@ -35,21 +35,14 @@ public class UIManager : MonoBehaviour
     public TMP_Text shopCoin;
     public Image towerHealthBar,
                  dayNightBar;
-    public GameObject towerUpgradePanel,
-                      turretPurchasePanelGameObject,
-                      inventoryPanel,
+    public GameObject inventoryPanel,
                       waveModePanel,
-                      menuModePanel,
                       buildModePanel,
-                      turretUpgradePanel,
                       skipTheNightButton,
                       skipTheDayButton,
                       infoBox,
                       comboBox,
                       buildThingsPanel;
-
-    public GameObject[] abilityLock;
-    private GameObject currentUpgradeObject;
     [SerializeField]
     private PlayerTower playerTower;
     [SerializeField]
@@ -62,27 +55,12 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        towerUpgradePanel.SetActive(false);
         inventoryPanel.SetActive(false);
         infoBox.SetActive(false);
         comboBox.SetActive(false);
         skipTheNightButton.SetActive(false);
         skipTheDayButton.SetActive(true);
-        turretUpgradePanel.SetActive(false);
-        foreach (var abilityLockObj in abilityLock)
-        {
-            abilityLockObj.SetActive(true);
-        }
-        turretPurchasePanelGameObject.SetActive(false);
         buildThingsPanel.SetActive(false);
-    }
-
-    void Update()
-    {
-        if(towerUpgradePanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-        {
-            TowerUpgradePanel(false);
-        }
     }
     #endregion
 
@@ -102,7 +80,6 @@ public class UIManager : MonoBehaviour
 
     public void BuildModeButton()
     {
-        if (towerUpgradePanel.activeSelf) UpgradeButton();
         GameManager.Instance.BuildMode();
         buildThingsPanel.SetActive(GameManager.Instance.isBuildMode);
         inventoryPanel.SetActive(GameManager.Instance.isBuildMode);
@@ -110,74 +87,11 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    #region Tower Upgrade Methods
-
-    public void TowerUpgradePanel(bool status)
-    {
-        towerUpgradePanel.SetActive(status);
-        if (!status) // For return to game
-        {
-            turretPurchasePanelGameObject.SetActive(status);
-            inventoryPanel.SetActive(status);
-            infoDisplay.gameObject.SetActive(status);
-        }
-    }
-
-    public void TowerUpgradeButtons(int ID)
-    {
-        // switch (ID)
-        // {
-        //     case 0:
-        //         playerTower.TowerHealthUpgrade();
-        //         break;
-        //     case 1:
-        //         playerTower.TowerAttackSpeedUpgrade();
-        //         break;
-        //     case 2:
-        //         playerTower.TowerTurretUpgrade();
-        //         break;
-        //     default:
-        //         break;
-        // }
-    }
-
-    public void AbilityUnlock(int index)
-    {
-        abilityLock[index].SetActive(false);
-    }
-
-    public void TurretPurchasePanel()
-    {
-        bool status = !turretPurchasePanelGameObject.activeSelf;
-        turretPurchasePanelGameObject.SetActive(status);
-        inventoryPanel.SetActive(status);
-    }
-
-    #endregion
-
-    public void TurretUpgradePanel(GameObject turret,bool status)
-    {
-        if(currentUpgradeObject == turret)
-        {
-            if(status) turretUpgradePanel.SetActive(!turretUpgradePanel.activeSelf);
-            else turretUpgradePanel.SetActive(false);
-        }
-        else
-        {
-            if(status) turretUpgradePanel.SetActive(true);
-            else turretUpgradePanel.SetActive(false);
-            currentUpgradeObject = turret;
-        }
-    }
-
     #region Update UI Methods
 
     public void BuildModeStatus(bool status)
     {
-        if(status)
-        {
-            turretUpgradePanel.SetActive(false);
-        }
+        
     }
 
     public void UpdateUIElements()
@@ -185,7 +99,7 @@ public class UIManager : MonoBehaviour
         if (enemyCount != null) enemyCount.text = "" + GameManager.Instance._enemyCount;
         if (playerScore != null) playerScore.text = "" + GameManager.Instance._playerScore;
         if (shopCoin != null) shopCoin.text = "" + GameManager.Instance._playerScore;
-        if (waveLevel != null) waveLevel.text = "" + GameManager.Instance._waveLevel;
+        if (waveLevel != null) waveLevel.text = "" + GameManager.Instance._currentDayCount;
         GameManager.Instance.SaveCurrentPlayerData();
     }
 
@@ -267,15 +181,9 @@ public class UIManager : MonoBehaviour
 
     public void WaveStatus(bool status)
     {
-        if(status)
-        {
-            turretUpgradePanel.SetActive(false);
-        }
         skipTheDayButton.SetActive(!status);
         waveModePanel.SetActive(status);
         if (!status) skipTheNightButton.SetActive(status);
         buildModePanel.SetActive(!status);
-        menuModePanel.SetActive(!status);
-        if(status && towerUpgradePanel.activeSelf) TowerUpgradePanel(!towerUpgradePanel.activeSelf);
     }
 }
