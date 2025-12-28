@@ -66,6 +66,7 @@ public class Photonfly : Enemy
         bullet.GetComponent<Bullet>().BulletSpeedSetUp(3);
         bullet.GetComponent<Bullet>().AttackTheTarget(_currentTarget, _currentTarget.gameObject.tag);
         bullet.GetComponent<Bullet>().SpecialEffect();
+        bullet.GetComponent<Bullet>().BulletDamageSetup(_enemyDamage);
         canShoot = true;
     }
 }

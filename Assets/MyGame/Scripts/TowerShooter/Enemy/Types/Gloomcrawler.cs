@@ -13,6 +13,8 @@ public class Gloomcrawler : Enemy
     private float enemyHealth;
     [SerializeField]
     private float attackRange;
+    [SerializeField]
+    private float enemyDamage;
     private bool canShoot;
     private bool _isMoving, _isSpawning;
     public GameObject projectilePrefab;
@@ -25,6 +27,7 @@ public class Gloomcrawler : Enemy
         base._enemyValue = enemyValue;
         base.isAlive = true;
         base.isStunned = false;
+        base._enemyDamage = enemyDamage;
         canShoot = true;
         _currentTarget = null;
         _isMoving = false;
@@ -34,7 +37,7 @@ public class Gloomcrawler : Enemy
     // Update is called once per frame
     void Update()
     {
-        if(_currentTarget==null || !_currentTarget.activeSelf) _currentTarget = FindClosestTarget();
+        if(_currentTarget==null || !_currentTarget.activeSelf || !_currentTarget.GetComponent<IDamagable>().isDamagable()) _currentTarget = FindClosestTarget();
         if (_currentTarget!=null) GoNearTheTarget();
         else Debug.Log("Shit");
     }
@@ -51,8 +54,9 @@ public class Gloomcrawler : Enemy
             {
                 var spawnPos = new Vector3 (transform.position.x , _currentTarget.transform.position.y, transform.position.z);
                 var bullet = Instantiate(projectilePrefab, spawnPos, projectilePrefab.transform.rotation);
-                bullet.GetComponent<Bullet>().BulletSpeedSetUp(3);
-                bullet.GetComponent<Bullet>().AttackTheTarget(_currentTarget, "Player");
+                bullet.GetComponent<Bullet>().BulletSpeedSetUp(10);
+                bullet.GetComponent<Bullet>().AttackTheTarget(_currentTarget, _currentTarget.gameObject.tag);
+                bullet.GetComponent<Bullet>().BulletDamageSetup(_enemyDamage);
                 canShoot = false;
                 StartCoroutine(ShootCooldown());
             }

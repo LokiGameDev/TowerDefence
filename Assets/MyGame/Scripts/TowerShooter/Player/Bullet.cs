@@ -35,12 +35,12 @@ public class Bullet : MonoBehaviour
     {
         transform.LookAt(target.transform);
         targetName = name;
-
     }
 
 
     void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag(targetName)) return;
         other.GetComponent<IDamagable>()?.GotHit(_damage);
         if(isSpecialEffect)
         {

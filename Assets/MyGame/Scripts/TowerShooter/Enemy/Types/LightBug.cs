@@ -9,6 +9,8 @@ public class LightBug : Enemy
     private int enemyValue;
     [SerializeField]
     private float enemyHealth;
+    [SerializeField]
+    private float enemyDamage;
 
     void OnEnable()
     {
@@ -17,12 +19,13 @@ public class LightBug : Enemy
         base._enemyValue = enemyValue;
         base.isAlive = true;
         base.isStunned = false;
+        base._enemyDamage = enemyDamage;
         SetEnemyHealthBar();
     }
     // Update is called once per frame
     void Update()
     {
-        if(_currentTarget==null) _currentTarget = FindClosestTarget();
+        if(_currentTarget==null || !_currentTarget.GetComponent<IDamagable>().isDamagable()) _currentTarget = FindClosestTarget();
         if (_currentTarget!=null) GoNearTheTarget();
         else Debug.Log("Shit");
     }
@@ -41,7 +44,12 @@ public class LightBug : Enemy
     {
         if (other.CompareTag("PlayerTurret") || other.CompareTag("PlayerTower"))
         {
+            if(other.GetComponent<IDamagable>()!=null)
+            {
+                if(!other.GetComponent<IDamagable>().isDamagable()) return;
+            }
             Sacrificed();
+            other.GetComponent<IDamagable>()?.GotHit(_enemyDamage);
         }
     }
 }

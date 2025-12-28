@@ -68,7 +68,7 @@ public class PlayerTurret : MonoBehaviour, IDamagable
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && _turretHealth > 0)
         {
             _turretHealth--;
             healthImage.fillAmount = _turretHealth/localMaxHealth;
@@ -85,10 +85,11 @@ public class PlayerTurret : MonoBehaviour, IDamagable
         if(_turretHealth <= 0)
         {
             _turretHealth = 0;
+            canShoot = false;
             return;
         }
         _turretHealth-=(int)damage;
-        if(_turretHealth <=0) GameManager.Instance.PlayTheAudio(AudioType.TurretDestroyed);
+        if(_turretHealth <=0) AudioManager.Instance.PlayTheAudioClip(AudioType.TurretDestroyed);
         healthImage.fillAmount = _turretHealth/localMaxHealth;
         Debug.Log("Hit");
         if (_turretHealth <= 0)
@@ -96,6 +97,11 @@ public class PlayerTurret : MonoBehaviour, IDamagable
             canShoot = false;
             Instantiate(turretExplosion,transform.position + new Vector3(1,0,1), Quaternion.identity);
         }
+    }
+
+    bool IDamagable.isDamagable()
+    {
+        return _turretHealth > 0;
     }
 
     public void TurretUpgradeStatus(bool status)
@@ -106,7 +112,7 @@ public class PlayerTurret : MonoBehaviour, IDamagable
     void OnMouseDown()
     {
         UIManager.Instance.ShowTheTurretDetails(true, this.gameObject.GetComponent<PlayerTurret>()); 
-        GameManager.Instance.PlayTheAudio(AudioType.MouseClick);
+        AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
     }
 
     public void RepairTheTurret()

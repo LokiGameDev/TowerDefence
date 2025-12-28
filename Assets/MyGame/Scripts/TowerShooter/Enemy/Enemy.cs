@@ -10,9 +10,11 @@ public class Enemy : MonoBehaviour, IDamagable, ISpecialEffect
 
     [SerializeField]
     protected EnemyAnimation enemyAnimation;
-    protected bool isAlive = false;
-    protected float _enemyHealth;
+    public EnemyType enemyType;
     protected int _enemyValue;
+    protected float _enemyHealth;
+    protected float _enemyDamage;
+    protected bool isAlive = false;
     protected bool isStunned = false;
     [SerializeField]
     protected Image healthImage;
@@ -109,7 +111,7 @@ public class Enemy : MonoBehaviour, IDamagable, ISpecialEffect
 
         foreach (var target in turrets)
         {
-            if(target.activeSelf==false) continue;
+            if(target.activeSelf==false || !target.GetComponent<IDamagable>().isDamagable()) continue;
             float distance = Vector3.Distance(transform.position, target.transform.position);
             if (distance < closestDistance)
             {
@@ -135,6 +137,11 @@ public class Enemy : MonoBehaviour, IDamagable, ISpecialEffect
     {
         healthImage.fillAmount = _enemyHealth/localMaxHealth;
     }
-        
+
+    public bool isDamagable()
+    {
+        return isAlive;
+    }
+
     #endregion
 }

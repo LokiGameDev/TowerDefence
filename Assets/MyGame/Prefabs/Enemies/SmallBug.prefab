@@ -68,12 +68,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimation: {fileID: 4780734826251597509}
+  enemyType: 0
   healthImage: {fileID: 0}
   canMoveForTest: 0
   deathEffect: {fileID: 9157105887711914197, guid: c4f829cb7dd4b864caf8832ec5b1ee55, type: 3}
   _speed: 2
-  enemyValue: 1
-  enemyHealth: 1
+  enemyValue: 2
+  enemyHealth: 5
+  enemyDamage: 2
 --- !u!1001 &859331657618672027
 PrefabInstance:
   m_ObjectHideFlags: 0

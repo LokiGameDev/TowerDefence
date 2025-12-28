@@ -46,9 +46,6 @@ public class GameManager : MonoBehaviour
     public Light globalLight,
                  towerLight;
 
-    public AudioSource audioSource;
-    public AudioClip[] soundClips;
-
     private float protectionTime;
     private float currentTime;
 
@@ -139,10 +136,10 @@ public class GameManager : MonoBehaviour
     public void EnemyGotDestroyed()
     {
         _enemyCount--;
-        PlayTheAudio(AudioType.EnemyDestroyed);
+        AudioManager.Instance.PlayTheAudioClip(AudioType.EnemyDestroyed);
         if (_enemyCount == 0 && !willEnemySpawn)
         {
-            PlayTheAudio(AudioType.WaveCleared);
+            AudioManager.Instance.PlayTheAudioClip(AudioType.WaveCleared);
             currentTime = 0;
             WaveCleared();
         }
@@ -394,42 +391,5 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = status ? 0 : 1;
     }
-
-    public void PlayTheAudio(AudioType audioType)
-    {
-        if(audioSource!=null)
-        {
-            switch(audioType)
-            {
-                case AudioType.MouseClick:
-                    audioSource.clip = soundClips[0];
-                    audioSource.volume = 1;
-                    audioSource.Play();
-                    break;
-                case AudioType.WaveCleared:
-                    audioSource.clip = soundClips[1];
-                    audioSource.volume = 0.5F;
-                    audioSource.Play();
-                    break;
-                case AudioType.EnemyDestroyed:
-                    audioSource.clip = soundClips[2];
-                    audioSource.volume = 0.5F;
-                    audioSource.Play();
-                    break;
-                case AudioType.TurretDestroyed:
-                    audioSource.clip = soundClips[3];
-                    audioSource.volume = 0.5F;
-                    audioSource.Play();
-                    break;
-            }
-        }
-    }
 }
 
-public enum AudioType
-{
-    MouseClick,
-    EnemyDestroyed,
-    TurretDestroyed,
-    WaveCleared
-}

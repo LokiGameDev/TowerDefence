@@ -11,6 +11,8 @@ public class PlayerTower : MonoBehaviour, IDamagable
     public float _bulletDamage { get; private set; }
     [SerializeField]
     private TowerShooter towerShooter;
+    [SerializeField]
+    private Animator towerAnimator;
 
     #endregion
 
@@ -18,8 +20,8 @@ public class PlayerTower : MonoBehaviour, IDamagable
 
     void Start()
     {
-        _towerHealth = 20;
-        _maxTowerHealth = 20;
+        _towerHealth = 500;
+        _maxTowerHealth = 500;
         _fireRate = 5f;
         _shooterRange = 10f;
         _bulletDamage = 1f;
@@ -30,10 +32,12 @@ public class PlayerTower : MonoBehaviour, IDamagable
     {
         if (other.CompareTag("Enemy"))
         {
+            towerAnimator.SetTrigger("Hit");
             _towerHealth--;
             UpdateTowerUI();
             if (_towerHealth <= 0)
             {
+                towerAnimator.SetTrigger("Dead");
                 GameManager.Instance.GameOver();
             }
         }
@@ -41,13 +45,20 @@ public class PlayerTower : MonoBehaviour, IDamagable
 
     void IDamagable.GotHit(float damage)
     {
+        towerAnimator.SetTrigger("Hit");
         _towerHealth-= (int)damage;
         Debug.Log("Tower got hit");
         UpdateTowerUI();
         if (_towerHealth <= 0)
         {
+            towerAnimator.SetTrigger("Dead");
             GameManager.Instance.GameOver();
         }
+    }
+
+    bool IDamagable.isDamagable()
+    {
+        return _towerHealth > 0;
     }
 
     #endregion

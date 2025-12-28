@@ -68,10 +68,11 @@ public class ShopManager : MonoBehaviour
 
     public void PurchaseItem(int id)
     {
+        AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
         if (GameManager.Instance.Purchasing(costOfItem[id]))
         {
             inventoryManager.AddItem(id, 1);
-            costOfItem[id] *= 2;
+            costOfItem[id] *= 4;
             SaveTheCurrentShopData();
         }
     }
@@ -106,6 +107,7 @@ public class ShopManager : MonoBehaviour
 
     public void UpgradeTower(int id)
     {
+        AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
         if (GameManager.Instance.Purchasing(costOfTowerUpgrade[id]))
         {
             playerTower.GetComponent<PlayerTower>();
@@ -136,6 +138,7 @@ public class ShopManager : MonoBehaviour
 
     public void UpgradeTurret(int number)
     {
+        AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
         if(number<4)
         {
             UpgradeTurret(0,number);
@@ -200,7 +203,6 @@ public class ShopManager : MonoBehaviour
         costOfTurretUpgrade = TurretUpgradeValuesConvertor(shopData.costOfTurretUpgrades);
         costOfItem = shopData.costOfTurrets;
         costOfTowerUpgrade = shopData.costOfTowerUpgrades;
-        Debug.Log($"Cost: {costOfTurretUpgrade[0][0]}");
         LoadAllTheTurretUpgradeCostText(TurretUpgradeValuesConvertor(shopData.costOfTurretUpgrades));
         LoadTheTurretCostText(costOfItem);
         LoadTheTowerUpgradeCostText(costOfTowerUpgrade);
@@ -277,10 +279,10 @@ public class ShopManager : MonoBehaviour
     private TurretSaveData InitialValueForTurrets()
     {
         TurretSaveData data = new TurretSaveData();
-        data.turrets[0] = new TurretData("Shooter", 100, 20, 1.0f, 5.0f);
-        data.turrets[1] = new TurretData("Slowdowner", 150, 30, 0.8f, 6.0f);
-        data.turrets[2] = new TurretData("Stunner", 200, 40, 0.6f, 7.0f);
-        data.turrets[3] = new TurretData("Destroyer", 250, 50, 0.5f, 8.0f);
+        data.turrets[0] = new TurretData("Shooter", 60, 15, 1.0f, 5.0f);
+        data.turrets[1] = new TurretData("Slowdowner", 90, 30, 0.8f, 6.0f);
+        data.turrets[2] = new TurretData("Stunner", 150, 45, 0.6f, 7.0f);
+        data.turrets[3] = new TurretData("Destroyer", 210, 90, 0.5f, 8.0f);
         return data;
     }
 

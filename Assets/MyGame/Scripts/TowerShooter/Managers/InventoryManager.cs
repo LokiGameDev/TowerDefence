@@ -15,10 +15,12 @@ public class InventoryManager : MonoBehaviour
         if (items.ContainsKey(id))
         {
             items[id] += qty;
+            Debug.Log("old" + id + " " +qty);
         }
         else
         {
             items.Add(id, qty);
+            Debug.Log("new" + id + " " +qty);
         }
         UIManager.Instance.UpdateInvetory(id, items[id]);
     }

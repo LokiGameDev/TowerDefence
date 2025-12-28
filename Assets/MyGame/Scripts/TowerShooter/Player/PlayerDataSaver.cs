@@ -4,17 +4,10 @@ using UnityEngine;
 
 public static class PlayerDataSaver
 {
-    static string[] allPath = new string[] {
-        PlayerPrefs.GetString("CurrentGamePath") + "/playerData1.dat"
-    };
-
-    static string[] shopDataPath = new string[] {
-        PlayerPrefs.GetString("CurrentGamePath") + "/shopData1.json"
-    };
 
     public static PlayerData LoadPlayerData()
     {
-        string path = allPath[GameManager.Instance.saveIndex];
+        string path = PlayerPrefs.GetString("CurrentGamePath") + "/playerData1.dat";
         if (!File.Exists(path)) return null;
 
         using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
@@ -66,7 +59,7 @@ public static class PlayerDataSaver
 
     public static void SavePlayerData(PlayerData data)
     {
-        string path = allPath[GameManager.Instance.saveIndex];
+        string path = PlayerPrefs.GetString("CurrentGamePath") + "/playerData1.dat";
         using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.Create)))
         {
             writer.Write(data.playerScore);
@@ -87,13 +80,13 @@ public static class PlayerDataSaver
     public static void SaveShopData(ShopData shopData)
     {
         string json = JsonUtility.ToJson(shopData);
-        File.WriteAllText(shopDataPath[0], json);
+        File.WriteAllText(PlayerPrefs.GetString("CurrentGamePath") + "/shopData1.json", json);
         Debug.Log("Shop data saved");
     }
 
     public static ShopData LoadShopData()
     {
-        if (!File.Exists(shopDataPath[0]))
+        if (!File.Exists(PlayerPrefs.GetString("CurrentGamePath") + "/shopData1.json"))
         {
             Debug.Log("Save not found. Creating new data.");
             ShopData shopData = new ShopData();
@@ -101,8 +94,7 @@ public static class PlayerDataSaver
             return shopData;
         }
 
-        string json = File.ReadAllText(shopDataPath[0]);
-        Debug.Log("Loaded Shop Data");
+        string json = File.ReadAllText(PlayerPrefs.GetString("CurrentGamePath") + "/shopData1.json");
         return JsonUtility.FromJson<ShopData>(json);
     }
 }

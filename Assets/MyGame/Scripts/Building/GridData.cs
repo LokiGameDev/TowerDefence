@@ -81,6 +81,15 @@ public class GridData
         return -1;
     }
 
+    internal int GetObjectIDAt(Vector3Int gridPosition)
+    {
+        if (placedObjectsData.ContainsKey(gridPosition))
+        {
+            return placedObjectsData[gridPosition].ID;
+        }
+        return -1;
+    }
+
     internal void RemoveObjectAt(Vector3Int gridPosition)
     {
         foreach (var position in placedObjectsData[gridPosition].occupiedCells)

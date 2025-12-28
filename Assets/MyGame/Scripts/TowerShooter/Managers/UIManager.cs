@@ -193,6 +193,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowTheTurretDetails(bool status, PlayerTurret data = null)
     {
+        if(GameManager.Instance.isBuildMode) return;
         if(status) turretDetailsObject.SetActive(status);
         else
         {

@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         _canSpawnEnemy = true;
-        _spawnRadius = 20;
+        _spawnRadius = 35;
     }
 
     #endregion
@@ -51,22 +51,45 @@ public class SpawnManager : MonoBehaviour
 
     public Vector3 GenerateRandomSpawnLoc()
     {
-        int theta = UnityEngine.Random.Range(0, 360);
+        Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
+        float radius = _spawnRadius + UnityEngine.Random.Range(0f, 10f);
 
-        float offset = UnityEngine.Random.Range(0, 10);
-
-        float z = (_spawnRadius + offset) * (float)Math.Sin(theta);
-        float x = (_spawnRadius + offset) * (float)Math.Cos(theta);
-
-        Vector3 pos = new Vector3(x, 0.5f, z);
-
-        return pos;
+        return new Vector3(circle.x * radius, 0.5f, circle.y * radius);
     }
 
     public void WaveOver()
     {
         _enemyCount = 0;
         StopAllCoroutines();
+    }
+
+    void OnDrawGizmos()
+    {
+        Vector3 center = transform.position;
+
+        DrawCircle(center, _spawnRadius, Color.red);
+        DrawCircle(center, _spawnRadius+10, Color.yellow);
+    }
+
+    void DrawCircle(Vector3 center, float radius, Color color)
+    {
+        Gizmos.color = color;
+
+        const int segments = 64;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / segments;
+            Vector3 nextPoint = center + new Vector3(
+                Mathf.Cos(angle) * radius,
+                0,
+                Mathf.Sin(angle) * radius
+            );
+
+            Gizmos.DrawLine(prevPoint, nextPoint);
+            prevPoint = nextPoint;
+        }
     }
 
     #endregion

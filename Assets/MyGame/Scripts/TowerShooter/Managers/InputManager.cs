@@ -17,10 +17,6 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            inventoryManager?.AddItem(0, 1);
-        }
         if (GameManager.Instance._canSkip)
         {
             if (Input.GetKeyDown(KeyCode.Space)) StartCoroutine(StartingAction());
@@ -29,18 +25,6 @@ public class InputManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.H))
         {
             mainCamera.GetComponent<CameraMovement>().SetPivotToOrigin();
-        }
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-            GameManager.Instance.ClearSavedGridData();
-        }
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            GameManager.Instance.ReduceInventory();
-        }
-        if(Input.GetKeyDown(KeyCode.N))
-        {
-            GameManager.Instance.ReduceScoreToZero();
         }
         WaveMode();
     }
@@ -61,7 +45,7 @@ public class InputManager : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
-                    hit.collider.gameObject.GetComponent<IDamagable>().GotHit(1);
+                    hit.collider.gameObject.GetComponent<IDamagable>().GotHit(5);
                 }
             }
         }

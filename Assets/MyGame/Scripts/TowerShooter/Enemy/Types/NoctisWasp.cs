@@ -12,6 +12,8 @@ public class NoctisWasp : Enemy
     private float enemyHealth;
     [SerializeField]
     private float attackRange;
+    [SerializeField]
+    private float enemyDamage;
     private bool canShoot;
     public GameObject projectilePrefab;
 
@@ -22,6 +24,7 @@ public class NoctisWasp : Enemy
         base._enemyValue = enemyValue;
         base.isAlive = true;
         base.isStunned = false;
+        base._enemyDamage = enemyDamage;
         canShoot = true;
         _currentTarget = null;
         SetEnemyHealthBar();
@@ -29,7 +32,7 @@ public class NoctisWasp : Enemy
     // Update is called once per frame
     void Update()
     {
-        if(_currentTarget==null || !_currentTarget.activeSelf) _currentTarget = FindClosestTarget();
+        if(_currentTarget==null || !_currentTarget.activeSelf || !_currentTarget.GetComponent<IDamagable>().isDamagable()) _currentTarget = FindClosestTarget();
         if (_currentTarget!=null) GoNearTheTarget();
         else Debug.Log("Shit");
     }
@@ -39,15 +42,16 @@ public class NoctisWasp : Enemy
     {
         if(!isAlive || isStunned) return;
         var targetPosition = new Vector3(_currentTarget.transform.position.x, transform.position.y, _currentTarget.transform.position.z);
-        if(Vector3.Distance(transform.position, targetPosition) < 5)
+        if(Vector3.Distance(transform.position, targetPosition) < attackRange)
         {
             enemyAnimation.EnemyAnimationTrigger("Attack");
             if (canShoot)
             {
                 var spawnPos = new Vector3 (transform.position.x , _currentTarget.transform.position.y, transform.position.z);
                 var bullet = Instantiate(projectilePrefab, spawnPos, projectilePrefab.transform.rotation);
-                bullet.GetComponent<Bullet>().BulletSpeedSetUp(3);
-                bullet.GetComponent<Bullet>().AttackTheTarget(_currentTarget, "Player");
+                bullet.GetComponent<Bullet>().BulletSpeedSetUp(10);
+                bullet.GetComponent<Bullet>().AttackTheTarget(_currentTarget, _currentTarget.gameObject.tag);
+                bullet.GetComponent<Bullet>().BulletDamageSetup(_enemyDamage);
                 canShoot = false;
                 StartCoroutine(ShootCooldown());
             }

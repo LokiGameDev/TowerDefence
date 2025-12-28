@@ -42,9 +42,9 @@ public class ShopData
 
     public ShopData()
     {
-        int[] TurretValues = {20, 20, 20, 20};
+        int[] TurretValues = {20, 40, 80, 160};
         costOfTurrets = TurretValues;
-        int[] TowerValues = {20,20,20,20};
+        int[] TowerValues = {30,30,30,30};
         costOfTowerUpgrades = TowerValues;
         int[] TurretUpgradeValues = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
         costOfTurretUpgrades = TurretUpgradeValues;

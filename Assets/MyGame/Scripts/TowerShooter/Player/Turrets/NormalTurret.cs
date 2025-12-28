@@ -23,6 +23,7 @@ public class NormalTurret : PlayerTurret, ISpecialEffect
 
     void Update()
     {
+        if(_turretHealth <=0 ) return;
         base.FindAllTargets();
         base.FindTheClosestTarget();
         if (currentTarget != null && currentTarget.gameObject.activeSelf)

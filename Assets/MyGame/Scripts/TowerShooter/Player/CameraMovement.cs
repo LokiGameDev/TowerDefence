@@ -5,15 +5,16 @@ public class CameraMovement : MonoBehaviour
     #region Variables
 
     [SerializeField]
-    private float   scrollSpeed = 10f,
+    private float   zoomSpeed = 10f,
                     rotationSpeed = 5f,
-                    minY = 4f,
-                    maxY,
-                    pivotMoveSpeed,
-                    maxZoom = 35f;
+                    movementSpeed = 10f,
+                    minZoomOut = 10f,
+                    maxZoomOut = 25f;
 
     [SerializeField]
     private Transform pivot;
+
+    private float maxLowPoint;
 
     #endregion
 
@@ -24,41 +25,54 @@ public class CameraMovement : MonoBehaviour
     void Update()
     {
         if(GameManager.Instance.MenuPanelStatus()) return;
-        if (((Input.GetAxis("Mouse ScrollWheel") != 0 && transform.position.y > minY) || Input.GetAxis("Mouse ScrollWheel") < 0 && transform.position.y <= minY)
-                && (Vector3.Distance(transform.position, pivot.position) < maxZoom ||
-                    (Vector3.Distance(transform.position, pivot.position) > maxZoom && Input.GetAxis("Mouse ScrollWheel") > 0)))
+
+        maxLowPoint = Vector3.Distance(transform.position,pivot.transform.position) * 0.75f;
+
+        if (transform.GetComponent<Camera>().orthographicSize >= maxZoomOut && Input.GetAxis("Mouse ScrollWheel") > 0 ||
+                    (transform.GetComponent<Camera>().orthographicSize <= minZoomOut && Input.GetAxis("Mouse ScrollWheel") < 0) ||
+                        (transform.GetComponent<Camera>().orthographicSize > minZoomOut && transform.GetComponent<Camera>().orthographicSize < maxZoomOut))
         {
-            float scrollAmount = Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
-            transform.position += transform.forward * scrollAmount;
+            float scrollAmount = Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+            transform.GetComponent<Camera>().orthographicSize -= scrollAmount;
         }
 
         if (Input.GetMouseButton(2) && pivot != null)
         {
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
-
-            transform.RotateAround(pivot.position, Vector3.up, mouseX * rotationSpeed);
-            
-            maxY = Vector3.Distance(transform.position, pivot.position) - (Vector3.Distance(transform.position, pivot.position) * 0.3f);
-
-            if ((transform.position.y > minY && transform.position.y < maxY) || (transform.position.y > maxY && mouseY > 0) || (transform.position.y < minY && mouseY < 0))
-            {
-                Vector3 right = transform.right;
-                transform.RotateAround(pivot.position, right, -mouseY * rotationSpeed);
-            }
-            
+            CameraPivotRotation();
         }
-        if((!GameManager.Instance.IsWaveGoing() || !GameManager.Instance.gamePaused) && !GameManager.Instance.isBuildMode)
+
+        // if((!GameManager.Instance.IsWaveGoing() || !GameManager.Instance.gamePaused) && !GameManager.Instance.isBuildMode)
+        // {
+        //     CameraAxisMovement();
+        // }
+
+    }
+
+    private void CameraPivotRotation()
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        transform.RotateAround(pivot.position, Vector3.up, mouseX * rotationSpeed);
+        
+        float maxY = Vector3.Distance(transform.position, pivot.position) - (Vector3.Distance(transform.position, pivot.position) * 0.1f);
+
+        if ((transform.position.y > maxLowPoint && transform.position.y < maxY) || (transform.position.y > maxY && mouseY > 0) || (transform.position.y < maxLowPoint && mouseY < 0))
         {
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-
-            Vector3 direction = transform.right * horizontal + transform.forward * vertical;
-            direction.y = 0;
-
-            pivot.position += direction.normalized * pivotMoveSpeed * Time.deltaTime;
+            Vector3 right = transform.right;
+            transform.RotateAround(pivot.position, right, -mouseY * rotationSpeed);
         }
+    }
 
+    private void CameraAxisMovement()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        Vector3 direction = transform.right * horizontal + transform.forward * vertical;
+        direction.y = 0;
+
+        pivot.position += direction.normalized * movementSpeed * Time.deltaTime;
     }
 
     public void SetPivotToOrigin()

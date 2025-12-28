@@ -37,6 +37,8 @@ public class RemovingState : IBuildingState
         {
             gameObjectIndex = selectedData.GetObjectIndexAt(gridPosition);
             if (gameObjectIndex < 0) return;
+            int id = selectedData.GetObjectIDAt(gridPosition);
+            if(id!=-1) GameManager.Instance.inventoryManager.AddItem(id,1);
             selectedData.RemoveObjectAt(gridPosition);
             objectPlacer.RemoveObject(gameObjectIndex);
         }

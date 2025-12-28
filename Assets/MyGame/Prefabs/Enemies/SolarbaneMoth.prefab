@@ -70,14 +70,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimation: {fileID: 7672695225205241990}
+  enemyType: 2
   healthImage: {fileID: 4380256159466666761}
   canMoveForTest: 0
   deathEffect: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
   _speed: 2
-  enemyValue: 3
-  enemyHealth: 10
+  enemyValue: 50
+  enemyHealth: 70
   attackRange: 3
   shootInterval: 3
+  enemyDamage: 30
   radius: 7
   enemyMask:
     serializedVersion: 2
@@ -275,6 +277,7 @@ GameObject:
   - component: {fileID: 1436761416651752846}
   - component: {fileID: 864929272484069527}
   - component: {fileID: 3069078301525709085}
+  - component: {fileID: 5561285838205601681}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -366,6 +369,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5561285838205601681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6539266857215675182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6d999417e912e4d84fb60a0271b91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8116350739500683817
 GameObject:
   m_ObjectHideFlags: 0

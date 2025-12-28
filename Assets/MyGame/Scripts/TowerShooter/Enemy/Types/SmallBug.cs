@@ -9,6 +9,8 @@ public class SmallBug : Enemy
     private int enemyValue;
     [SerializeField]
     private float enemyHealth;
+    [SerializeField]
+    private float enemyDamage;
 
     void OnEnable()
     {
@@ -16,6 +18,7 @@ public class SmallBug : Enemy
         base.localMaxHealth = enemyHealth;
         base._enemyValue = enemyValue;
         base.isAlive = true;
+        base._enemyDamage = enemyDamage;
     }
     // Update is called once per frame
     void Update()
@@ -40,6 +43,7 @@ public class SmallBug : Enemy
         if (other.CompareTag("PlayerTurret") || other.CompareTag("PlayerTower"))
         {
             Destroy(this.gameObject);
+            other.GetComponent<IDamagable>()?.GotHit(_enemyDamage);
         }
     }
 

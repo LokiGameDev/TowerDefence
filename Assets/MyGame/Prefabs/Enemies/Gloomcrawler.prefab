@@ -69,13 +69,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimation: {fileID: 5074372568195774855}
+  enemyType: 3
   healthImage: {fileID: 5099484498562334025}
   canMoveForTest: 0
   deathEffect: {fileID: 5642766282230003982, guid: 725dc31c442b5f04fa98bb6d4234b81c, type: 3}
   _speed: 2
-  enemyValue: 2
-  enemyHealth: 150
+  enemyValue: 30
+  enemyHealth: 50
   attackRange: 5
+  enemyDamage: 15
   projectilePrefab: {fileID: 970515087586980066, guid: 89a546c7812c23047b92fc9d1e7b0104, type: 3}
   smallBugPrefab: {fileID: 462780452945384831, guid: ee615b41f77b87040a982c5dd709ab1a, type: 3}
 --- !u!1 &6202596306337661039
@@ -90,6 +92,7 @@ GameObject:
   - component: {fileID: 5899477814500929276}
   - component: {fileID: 3804596134782261474}
   - component: {fileID: 5713944660232045246}
+  - component: {fileID: 7253468824743726080}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -181,6 +184,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7253468824743726080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6202596306337661039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6d999417e912e4d84fb60a0271b91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6512903556405488289
 GameObject:
   m_ObjectHideFlags: 0

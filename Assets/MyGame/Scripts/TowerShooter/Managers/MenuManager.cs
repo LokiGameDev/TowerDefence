@@ -13,6 +13,7 @@ public class MenuManager: MonoBehaviour
                       modelMenu;
     public TMP_InputField saveNameField;
     private int newGameIndex;
+    private string saveGamePath;
 
     void Start()
     {
@@ -67,7 +68,9 @@ public class MenuManager: MonoBehaviour
             string[] folders = Directory.GetDirectories(path);
             string spath = Path.Combine(path, folders[0]);
             PlayerPrefs.SetString("CurrentGamePath", spath);
+            PlayerPrefs.Save();
             Debug.Log(spath);
+            saveGamePath = spath;
             StartTheGame();
         }
         else
@@ -98,15 +101,27 @@ public class MenuManager: MonoBehaviour
             Directory.CreateDirectory(spath);
 
         PlayerPrefs.SetString("CurrentGamePath", spath);
+        PlayerPrefs.Save();
         Debug.Log(spath);
+        saveGamePath = spath;
         StartTheGame();
     }
 
     public void StartTheGame()
     {
-        if(PlayerPrefs.HasKey("CurrentGamePath"))
+        if(PlayerPrefs.HasKey("CurrentGamePath") && PlayerPrefs.GetString("CurrentGamePath") == saveGamePath)
         {
-            SceneManager.LoadScene("Main");
+            StartCoroutine(DelayedLoadScene());
         }
+        else
+        {
+            Debug.LogError("Save game path not set correctly!");
+        }
+    }
+
+    IEnumerator DelayedLoadScene()
+    {
+        yield return new WaitForSeconds(0.1f);
+        SceneManager.LoadScene("Main");
     }
 }

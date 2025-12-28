@@ -12,6 +12,8 @@ public class TowerShooter : MonoBehaviour
     public PlayerTower playerTower;
     public GameObject bulletPrefab;
 
+    public GameObject towerAim;
+
     #endregion
 
     #region Unity Methods
@@ -26,8 +28,8 @@ public class TowerShooter : MonoBehaviour
         var target = FindClosestTargetInRange();
         if (target != null && target.activeSelf && _canShoot)
         {
-            transform.LookAt(target.transform);
-            var bullet = Instantiate(bulletPrefab, transform.position, bulletPrefab.transform.rotation);
+            towerAim.transform.LookAt(target.transform);
+            var bullet = Instantiate(bulletPrefab, towerAim.transform.position, bulletPrefab.transform.rotation);
             bullet.GetComponent<Bullet>().BulletSpeedSetUp(_bulletSpeed);
             bullet.GetComponent<Bullet>().AttackTheTarget(target, "Enemy");
             _canShoot = false;

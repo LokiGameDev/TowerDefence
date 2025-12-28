@@ -6,11 +6,10 @@ public class EnemyPool : MonoBehaviour
     #region Variables
 
     [SerializeField]
-    private Enemy enemyPrefab;
-    [SerializeField]
     private Enemy[] enemyPrefabs;
+    private Dictionary<EnemyType, Queue<Enemy>> enemyTypePools = new Dictionary<EnemyType, Queue<Enemy>>();
     [SerializeField]
-    private Queue<Enemy> enemyPool = new Queue<Enemy>();
+    private GameObject enemyParent;
 
     #endregion
 
@@ -36,32 +35,53 @@ public class EnemyPool : MonoBehaviour
 
     public Enemy Get()
     {
-        if (enemyPool.Count == 0)
-        {
-            AddEnemy(1);
-        }
-        return enemyPool.Dequeue();
+        int index = Random.Range(0, (GameManager.Instance._currentDayCount/5)+1);
+        EnemyType enemyType = (EnemyType)Mathf.Clamp(index, 0, System.Enum.GetValues(typeof(EnemyType)).Length - 1);
+        return GetByType(enemyType);
     }
 
-    private void AddEnemy(int count)
+    public Enemy GetByType(EnemyType type)
     {
-        Enemy enemy = Instantiate(SpawnRandomEnemy());
-        enemy.gameObject.SetActive(false);
-        enemyPool.Enqueue(enemy);
+        if(!enemyTypePools.ContainsKey(type))
+        {
+            enemyTypePools[type] = new Queue<Enemy>();
+        }
+        if (enemyTypePools[type].Count == 0)
+        {
+            Enemy enemy = Instantiate(SpawnEnemy(type),enemyParent.transform);
+            enemy.gameObject.SetActive(false);
+            enemyTypePools[type].Enqueue(enemy);
+        }
+        return enemyTypePools[type].Dequeue();
     }
 
     public void ReturnToPool(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
-        enemyPool.Enqueue(enemy);
+        enemyTypePools[enemy.enemyType].Enqueue(enemy);
     }
 
-    public Enemy SpawnRandomEnemy()
+    private Enemy SpawnEnemy(EnemyType type)
     {
-        int val = GameManager.Instance._currentDayCount;
-        int index = Random.Range(0,val>=20 ? 3 : val>=15 ? 2 : val>=10 ? 1 : 0);
-        return enemyPrefabs[index];
+        foreach (var enemy in enemyPrefabs)
+        {
+            if (enemy.enemyType == type)
+            {
+                return enemy;
+            }
+        }
+        Debug.LogError($"Enemy of type {type} not found!");
+        return null;
     }
 
     #endregion
+}
+
+
+public enum EnemyType
+{
+    LightBug,
+    NoctisWasp,
+    SolarbaneMoth,
+    Gloomcrawler
 }

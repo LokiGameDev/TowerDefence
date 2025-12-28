@@ -13,6 +13,8 @@ public class SolarbaneMoth : Enemy
     private float enemyHealth;
     [SerializeField]
     private float attackRange, shootInterval;
+    [SerializeField]
+    private float enemyDamage;
     private bool canShoot;
 
     void OnEnable()
@@ -22,6 +24,7 @@ public class SolarbaneMoth : Enemy
         base._enemyValue = enemyValue;
         base.isAlive = true;
         base.isStunned = false;
+        base._enemyDamage = enemyDamage;
         canShoot = true;
         _currentTarget = null;
         SetEnemyHealthBar();
@@ -29,7 +32,7 @@ public class SolarbaneMoth : Enemy
     // Update is called once per frame
     void Update()
     {
-        if(_currentTarget==null || !_currentTarget.activeSelf) _currentTarget = FindClosestTarget();
+        if(_currentTarget==null || !_currentTarget.activeSelf || !_currentTarget.GetComponent<IDamagable>().isDamagable()) _currentTarget = FindClosestTarget();
         if (_currentTarget!=null) GoNearTheTarget();
         else Debug.Log("Shit");
     }
@@ -73,7 +76,7 @@ public class SolarbaneMoth : Enemy
         foreach (Collider col in hits)
         {
             IDamagable dmg = col.GetComponent<IDamagable>();
-            dmg?.GotHit(5);
+            dmg?.GotHit(_enemyDamage);
         }
     }
 

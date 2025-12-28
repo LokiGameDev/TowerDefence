@@ -23,9 +23,10 @@ public class StunnerTurret : PlayerTurret, ISpecialEffect
 
     void Update()
     {
+        if(_turretHealth <=0 ) return;
         base.FindAllTargets();
         base.FindTheClosestTarget();
-        if (currentTarget != null && currentTarget.gameObject.activeSelf)
+        if (currentTarget != null && currentTarget.gameObject.activeSelf )
         {
             if (Vector3.Distance(currentTarget.position, transform.position) < _attackRadius)
             {
