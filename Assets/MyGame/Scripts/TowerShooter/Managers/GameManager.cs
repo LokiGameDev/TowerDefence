@@ -208,6 +208,7 @@ public class GameManager : MonoBehaviour
         _currentDayCount++;
         UIManager.Instance.UpdateUIElements();
         UIManager.Instance.ShowTheTurretDetails(false);
+        ToolTipManager.Instance.Hide();
         spawnManager.StartTheSpawn(_currentDayCount);
         ModeChanged();
     }
@@ -227,6 +228,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateWaveBar(1, true);
         PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
         StartCoroutine(ProtectionDecay());
+        UnlockPurchaseItemsDayCheck();
     }
 
     public void SkipTheProtection()
@@ -245,6 +247,16 @@ public class GameManager : MonoBehaviour
                 EnemyPool.Instance.ReturnToPool(e);
             }
         }
+    }
+
+    public void IncreaseDayCount()
+    {
+        _currentDayCount++;
+        _savedDayCount = _currentDayCount;
+        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+        UIManager.Instance.UpdateUIElements();
+        UnlockPurchaseItemsDayCheck();
+
     }
 
     public UnityEvent onModeChange;

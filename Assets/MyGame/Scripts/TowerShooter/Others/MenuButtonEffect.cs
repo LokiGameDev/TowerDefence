@@ -42,5 +42,6 @@ public class MenuButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
         Color color = buttonText.color;
         color.a = 0.8f;
         buttonText.color = color;
+        AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
     }
 }

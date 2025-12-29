@@ -22,6 +22,8 @@ public class ToolTipManager : MonoBehaviour
 
     public void Show(string text)
     {
+        if(text == "")
+            return;
         tooltipText.text = text;
         tooltipRect.gameObject.SetActive(true);
     }

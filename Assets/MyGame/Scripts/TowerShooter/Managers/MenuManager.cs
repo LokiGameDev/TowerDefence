@@ -1,20 +1,26 @@
 using UnityEngine;
 using TMPro;
-using System.Collections;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Collections;
 
 public class MenuManager: MonoBehaviour
 {
+    #region Varialbes
     public GameObject mainMenuPanel,
                       startMenuPanel,
                       settingsMenuPanel,
                       newGamePanel,
                       modelMenu;
     public TMP_InputField saveNameField;
+    public LoadSaveFileDetails loadSaveFileDetails;
+    public GameObject infoBox;
+    public TMP_Text infoDisplay;
     private int newGameIndex;
     private string saveGamePath;
+    #endregion
 
+    #region Startup and Panel Functions
     void Start()
     {
         mainMenuPanel.SetActive(true);
@@ -22,11 +28,7 @@ public class MenuManager: MonoBehaviour
         settingsMenuPanel.SetActive(false);
         newGamePanel.SetActive(false);
         modelMenu.SetActive(true);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
+        infoBox.SetActive(false);
     }
 
     public void SettingsMenu()
@@ -47,7 +49,7 @@ public class MenuManager: MonoBehaviour
         newGamePanel.SetActive(false);
     }
 
-    public void StartGame()
+    public void StartMenu()
     {
         mainMenuPanel.SetActive(false);
         startMenuPanel.SetActive(true);
@@ -60,16 +62,58 @@ public class MenuManager: MonoBehaviour
         
     }
 
+    #endregion
+
+    #region Helping functions
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void BactToMainMenu()
+    {
+        MainMenu();
+    }
+
+    public void DisplayInformation(string msg)
+    {
+        if (!infoBox.activeSelf)
+        {
+            infoBox.SetActive(true);
+            infoDisplay.text = msg;
+            StartCoroutine(DisplayMessageCooldown());
+        }
+        else
+        {
+            infoDisplay.text = msg;
+        }
+    }
+
+    IEnumerator DisplayMessageCooldown()
+    {
+        yield return new WaitForSeconds(2);
+        infoBox.gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    #region Save Game Functions
+
     public void LoadSaveGame(int saveSlot)
     {
         string path = Application.persistentDataPath + "/" + saveSlot;
         if (Directory.Exists(path))
         {
+            if(loadSaveFileDetails.towerHealthValues[saveSlot] <= 0)
+            {
+                DisplayInformation("Tower is destroyed. Cannot Play.");
+                return;
+            }
             string[] folders = Directory.GetDirectories(path);
             string spath = Path.Combine(path, folders[0]);
             PlayerPrefs.SetString("CurrentGamePath", spath);
             PlayerPrefs.Save();
-            Debug.Log(spath);
             saveGamePath = spath;
             StartTheGame();
         }
@@ -79,15 +123,15 @@ public class MenuManager: MonoBehaviour
         }
     }
 
-    public void BactToMainMenu()
-    {
-        MainMenu();
-    }
-
     public void NewGame(int saveSlot)
     {
         newGamePanel.SetActive(true);
         newGameIndex = saveSlot;
+    }
+
+    public void CancelNewGame()
+    {
+        newGamePanel.SetActive(false);
     }
 
     public void SaveAndPlayNewGame()
@@ -102,26 +146,21 @@ public class MenuManager: MonoBehaviour
 
         PlayerPrefs.SetString("CurrentGamePath", spath);
         PlayerPrefs.Save();
-        Debug.Log(spath);
         saveGamePath = spath;
         StartTheGame();
     }
+
+    #endregion
 
     public void StartTheGame()
     {
         if(PlayerPrefs.HasKey("CurrentGamePath") && PlayerPrefs.GetString("CurrentGamePath") == saveGamePath)
         {
-            StartCoroutine(DelayedLoadScene());
+            SceneManager.LoadScene("Main");
         }
         else
         {
             Debug.LogError("Save game path not set correctly!");
         }
-    }
-
-    IEnumerator DelayedLoadScene()
-    {
-        yield return new WaitForSeconds(0.1f);
-        SceneManager.LoadScene("Main");
     }
 }

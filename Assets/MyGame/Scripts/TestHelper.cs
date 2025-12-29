@@ -28,6 +28,10 @@ public class TestHelper : MonoBehaviour
         {
             GameManager.Instance.ReduceScoreToZero();
         }
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            GameManager.Instance.IncreaseDayCount();
+        }
     }
 
     void UnlockAllShopItems()

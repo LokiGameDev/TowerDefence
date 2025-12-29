@@ -30,8 +30,6 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public GameObject scaleObject;
 
-    public bool isMainMenu = false;
-
     [TextArea]
     public string tooltipText;
 
@@ -45,9 +43,11 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ToolTipManager.Instance.Show(tooltipText);
+        ToolTipManager.Instance?.Show(tooltipText);
         switch (effectType)
         {
+            case EffectType.None:
+                break;
             case EffectType.HoverScale:
                 StartCoroutine(ScaleEffect(Vector3.one * scaleAmount));
                 break;
@@ -73,7 +73,8 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        ToolTipManager.Instance.Hide();
+        ToolTipManager.Instance?.Hide();
+        if (effectType == EffectType.None) return;
         StartCoroutine(ScaleEffect(Vector3.one));
 
         if (img)
@@ -85,8 +86,9 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (effectType == EffectType.None) return;
         rect.localScale = Vector3.one;
-        if(!isMainMenu) AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
+        AudioManager.Instance.PlayTheAudioClip(AudioType.MouseClick);
     }
 
     private IEnumerator Shake()

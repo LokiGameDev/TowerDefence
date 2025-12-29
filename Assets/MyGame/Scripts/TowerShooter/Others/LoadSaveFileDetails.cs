@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
@@ -11,6 +9,7 @@ public class LoadSaveFileDetails : MonoBehaviour
     public TMP_Text[] waveNumbers,
                       towerHealth,
                       playerScore;
+    public int[] towerHealthValues;
 
     public void Awake()
     {
@@ -40,6 +39,7 @@ public class LoadSaveFileDetails : MonoBehaviour
             {
                 waveNumbers[index].text = data.waveNumber.ToString();
                 towerHealth[index].text = data.towerHealth.ToString();
+                towerHealthValues[index] = data.towerHealth;
                 playerScore[index].text = data.playerScore.ToString();
             }
         }
