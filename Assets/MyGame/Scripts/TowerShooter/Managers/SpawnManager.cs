@@ -60,9 +60,13 @@ public class SpawnManager : MonoBehaviour
     public void WaveOver()
     {
         _enemyCount = 0;
+        GameManager.Instance.willEnemySpawn = false;
         StopAllCoroutines();
     }
 
+    #endregion
+
+    #region Gizmos
     void OnDrawGizmos()
     {
         Vector3 center = transform.position;

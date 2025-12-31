@@ -105,7 +105,7 @@ public class MenuManager: MonoBehaviour
         string path = Application.persistentDataPath + "/" + saveSlot;
         if (Directory.Exists(path))
         {
-            if(loadSaveFileDetails.towerHealthValues[saveSlot] <= 0)
+            if(loadSaveFileDetails.GetTowerHealthValue(saveSlot) <= 0)
             {
                 DisplayInformation("Tower is destroyed. Cannot Play.");
                 return;

@@ -32,6 +32,7 @@ public class TowerShooter : MonoBehaviour
             var bullet = Instantiate(bulletPrefab, towerAim.transform.position, bulletPrefab.transform.rotation);
             bullet.GetComponent<Bullet>().BulletSpeedSetUp(_bulletSpeed);
             bullet.GetComponent<Bullet>().AttackTheTarget(target, "Enemy");
+            bullet.GetComponent<Bullet>().BulletDamageSetup(playerTower._bulletDamage);
             _canShoot = false;
             StartCoroutine(ShootCoolDown());
         }

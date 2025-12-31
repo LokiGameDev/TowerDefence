@@ -59,6 +59,11 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    public void CloseShopPanel()
+    {
+        shopPanel.SetActive(false);
+    }
+
     public bool ShopStatus()
     {
         return shopPanel.activeSelf;
@@ -129,6 +134,7 @@ public class ShopManager : MonoBehaviour
             costOfTowerUpgrade[id] *= 2;
             SaveTheCurrentShopData();
             turretUpgradeEvent?.Invoke();
+            GameManager.Instance.SaveTowerData();
         }
     }
 

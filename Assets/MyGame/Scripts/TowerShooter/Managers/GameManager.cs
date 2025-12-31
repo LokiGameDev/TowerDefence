@@ -77,36 +77,16 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if(!IsWaveGoing()) UIManager.Instance.UpdateWaveBar(1-(currentTime / protectionTime), true);
-        //GlobalLightDayCycle(currentTime / dayCycleTime);
         if(!gamePaused) currentTime += Time.deltaTime;
     }
     #endregion
 
     #region GameRelated Change Methods
 
-    public void WaveOver()
-    {
-        StopAllCoroutines();
-        _enemyCount = 0;
-        currentTime = 0;
-        spawnManager.WaveOver();
-        _savedDayCount++;
-        UnlockPurchaseItemsDayCheck();
-        GameObject.Find("PlayerTower").GetComponent<PlayerTower>().GameOver();
-        KillAllAvailableEnemies();
-        UIManager.Instance.UpdateUIElements();
-        UIManager.Instance.WaveStatus(false);
-    }
-
     public void GameOver()
     {
         GamePaused(true);
         UIManager.Instance.GameOver();
-    }
-
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(0);
     }
 
     public void BuildMode()
@@ -118,7 +98,6 @@ public class GameManager : MonoBehaviour
             inputManagerBuildMode.GetComponent<InputManagerBuildMode>().enabled = true;
             UIManager.Instance.BuildModeStatus(true);
             UIManager.Instance.ShowTheTurretDetails(false);
-            ModeChanged();
         }
         else
         {
@@ -127,6 +106,22 @@ public class GameManager : MonoBehaviour
             inputManager.GetComponent<InputManager>().enabled = true;
             UIManager.Instance.BuildModeStatus(true);
         }
+    }
+
+    public void WaveCleared()
+    {
+        StopAllCoroutines();
+        currentTime = 0;
+        _enemyCount = 0;
+        _savedDayCount = _currentDayCount;
+        spawnManager.WaveOver();
+        UIManager.Instance.WaveStatus(false);
+        UIManager.Instance.UpdateUIElements();
+        UIManager.Instance.UpdateWaveBar(1, true);
+        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+        PlayerDataSaver.SaveTowerData(_playerTower.GetComponent<PlayerTower>().GetTowerData());
+        StartCoroutine(ProtectionDecay());
+        UnlockPurchaseItemsDayCheck();
     }
 
     #endregion
@@ -140,7 +135,6 @@ public class GameManager : MonoBehaviour
         if (_enemyCount == 0 && !willEnemySpawn)
         {
             AudioManager.Instance.PlayTheAudioClip(AudioType.WaveCleared);
-            currentTime = 0;
             WaveCleared();
         }
         UIManager.Instance.UpdateUIElements();
@@ -157,7 +151,6 @@ public class GameManager : MonoBehaviour
         if (_playerScore >= value)
         {
             _playerScore -= value;
-            Debug.Log("Purchased Item for " + value);
             UIManager.Instance.UpdateUIElements();
             return true;
         }
@@ -196,39 +189,26 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    public bool IsWaveGoing()
-    {
-        return GameObject.FindGameObjectsWithTag("Enemy").Count() > 0 ? true : false;
-    }
-
-    public void StartTheWave()
-    {
-        UIManager.Instance.WaveStatus(true);
-        if(shopManager.ShopStatus()) shopManager.ShopPanelActivate();
-        _currentDayCount++;
-        UIManager.Instance.UpdateUIElements();
-        UIManager.Instance.ShowTheTurretDetails(false);
-        ToolTipManager.Instance.Hide();
-        spawnManager.StartTheSpawn(_currentDayCount);
-        ModeChanged();
-    }
+    #region Wave Methods
 
     private void ProtectionEnded()
     {
+        currentTime = 0;
         UIManager.Instance.WaveStatus(true);
         UIManager.Instance.UpdateWaveBar(0, true);
         if(isBuildMode) UIManager.Instance.BuildModeButton();
         StartTheWave();
     }
 
-    public void WaveCleared()
+    public void StartTheWave()
     {
-        UIManager.Instance.WaveStatus(false);
-        _savedDayCount = _currentDayCount;
-        UIManager.Instance.UpdateWaveBar(1, true);
-        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
-        StartCoroutine(ProtectionDecay());
-        UnlockPurchaseItemsDayCheck();
+        UIManager.Instance.WaveStatus(true);
+        shopManager.CloseShopPanel();
+        _currentDayCount++;
+        UIManager.Instance.UpdateUIElements();
+        UIManager.Instance.ShowTheTurretDetails(false);
+        ToolTipManager.Instance.Hide();
+        spawnManager.StartTheSpawn(_currentDayCount);
     }
 
     public void SkipTheProtection()
@@ -237,34 +217,9 @@ public class GameManager : MonoBehaviour
         ProtectionEnded();
     }
 
-    private void KillAllAvailableEnemies()
-    {
-        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (var ene in enemies)
-        {
-            if(ene.TryGetComponent(out Enemy e))
-            {
-                EnemyPool.Instance.ReturnToPool(e);
-            }
-        }
-    }
-
-    public void IncreaseDayCount()
-    {
-        _currentDayCount++;
-        _savedDayCount = _currentDayCount;
-        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
-        UIManager.Instance.UpdateUIElements();
-        UnlockPurchaseItemsDayCheck();
-
-    }
-
-    public UnityEvent onModeChange;
-
-    void ModeChanged()
-    {
-        onModeChange?.Invoke();
-    }
+    #endregion
+    
+    #region Combo Methods
 
     private float   lastComboTime = 0;
     [SerializeField]
@@ -286,29 +241,89 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SaveTheGridData(PlacementData placementData)
+    #endregion
+    
+    #region Button Methods
+
+    public void MainMenu()
     {
-        gridDataSaver.SaveGridData(placementData);
+        SaveTheGame();
+        SceneManager.LoadScene(0);
     }
 
-    public void RemoveObjectFromData(int gameObjectIndex)
+    public void OpenShop()
     {
-        gridDataSaver.RemoveObjectFromSavedData(gameObjectIndex);
+        shopManager.ShopPanelActivate();
     }
 
-    public void ClearSavedGridData()
+    public void GamePaused(bool status)
     {
-        gridDataSaver.ClearSavedData();
+        Time.timeScale = status ? 0 : 1;
     }
 
-    public void LoadTheGridData()
+    public void QuitApplication()
     {
-        gridDataSaver.LoadTheGridData();
+        #if UNITY_EDITOR
+            Debug.Log("Application quit");
+        #else
+            Application.Quit();
+        #endif
     }
 
-    public void SaveCurrentPlayerData()
+    #endregion
+
+    #region Helping functions
+
+    public TurretData GetTurretData(int turretID)
     {
-        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+        TurretSaveData allTurretData = shopManager.GetCurrentTurretData();
+        if(allTurretData == null)
+        {
+            return null;
+        }
+        return allTurretData.turrets[turretID];
+    }
+
+    public bool IsWaveGoing()
+    {
+        return GameObject.FindGameObjectsWithTag("Enemy").Count() > 0 ? true : false;
+    }
+
+    public bool MenuPanelStatus()
+    {
+        return shopManager.ShopStatus();
+    }
+
+    #endregion
+
+    #region Save and Load Methods
+
+    public void InitializeSavedData()
+    {
+        PlayerData data = PlayerDataSaver.LoadPlayerData();
+        TowerData towerData = PlayerDataSaver.LoadTowerData();
+        if(towerData == null)
+        {
+            towerData = new TowerData();
+        }
+        if (data == null)
+        {
+            _playerScore = 0;
+            _currentDayCount = 0;
+            _savedDayCount = 0;
+            _playerTower.GetComponent<PlayerTower>().SetTowerStats(towerData);
+            inventoryManager.LoadItems(new Dictionary<int, int>());
+            PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+            PlayerDataSaver.SaveTowerData(_playerTower.GetComponent<PlayerTower>().GetTowerData());
+            return;
+        }
+        _playerScore = data.playerScore;
+        _currentDayCount = data.waveNumber;
+        _savedDayCount = data.waveNumber;
+        _playerTower.GetComponent<PlayerTower>().SetTowerStats(towerData);
+        inventoryManager.LoadItems(data.inventoryItems);
+        PlayerDataSaver.SaveTowerData(_playerTower.GetComponent<PlayerTower>().GetTowerData());
+        if(data.towerHealth <= 0) GameOver();
     }
 
     public PlayerData NeedAllDataToSave()
@@ -321,31 +336,43 @@ public class GameManager : MonoBehaviour
         );
     }
 
-
-    public void InitializeSavedData()
+    public void SaveTheGame()
     {
-        PlayerData data = PlayerDataSaver.LoadPlayerData();
-        if (data == null)
-        {
-            _playerScore = 0;
-            _currentDayCount = 0;
-            _savedDayCount = 0;
-            _playerTower.GetComponent<PlayerTower>().SetMaxTowerHealth();
-            inventoryManager.LoadItems(new Dictionary<int, int>());
-            PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
-            return;
-        }
-        _playerScore = data.playerScore;
-        _currentDayCount = data.waveNumber;
-        _savedDayCount = data.waveNumber;
-        _playerTower.GetComponent<PlayerTower>().SetTowerHealth(data.towerHealth);
-        inventoryManager.LoadItems(data.inventoryItems);
-        if(data.towerHealth <= 0) GameOver();
+        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+        PlayerDataSaver.SaveTowerData(_playerTower.GetComponent<PlayerTower>().GetTowerData());
     }
 
-    public void ReduceInventory()
+    public void SaveTowerData()
     {
-        inventoryManager.RemoveItem(0, 1);
+        PlayerDataSaver.SaveTowerData(_playerTower.GetComponent<PlayerTower>().GetTowerData());
+    }
+
+    public void SaveTheGridData(PlacementData placementData)
+    {
+        gridDataSaver.SaveGridData(placementData);
+    }
+
+    public void RemoveObjectFromData(int gameObjectIndex)
+    {
+        gridDataSaver.RemoveObjectFromSavedData(gameObjectIndex);
+    }
+
+    #endregion
+    
+    #region Testing purposes only
+    public void IncreaseDayCount()
+    {
+        _currentDayCount++;
+        _savedDayCount = _currentDayCount;
+        PlayerDataSaver.SavePlayerData(NeedAllDataToSave());
+        UIManager.Instance.UpdateUIElements();
+        UnlockPurchaseItemsDayCheck();
+
+    }
+
+    public void ClearSavedGridData()
+    {
+        gridDataSaver.ClearSavedData();
     }
 
     public void ReduceScoreToZero()
@@ -354,54 +381,14 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateUIElements();
     }
 
-    public void OpenShop()
-    {
-        shopManager.ShopPanelActivate();
-    }
-
-    public TurretData GetTurretData(int turretID)
-    {
-        TurretSaveData allTurretData = shopManager.GetCurrentTurretData();
-        if(allTurretData == null)
-        {
-            return null;
-        }
-        return allTurretData.turrets[turretID];
-    }
-
-    public bool MenuPanelStatus()
-    {
-        return shopManager.ShopStatus();
-    }
-
     public void RegenTowerHealth()
     {
         _playerTower.GetComponent<PlayerTower>().SetMaxTowerHealth();
     }
 
-    public void QuitApplication()
+    public void ReduceInventory()
     {
-        #if UNITY_EDITOR
-            Debug.Log("Application quit");
-        #else
-            Application.Quit();
-        #endif
+        inventoryManager.RemoveItem(0, 1);
     }
-
-    public void MainMenu()
-    {
-        SaveCurrentPlayerData();
-        SceneManager.LoadScene(0);
-    }
-
-    public void SaveTheGame()
-    {
-        SaveCurrentPlayerData();
-    }
-
-    public void GamePaused(bool status)
-    {
-        Time.timeScale = status ? 0 : 1;
-    }
+    #endregion
 }
-

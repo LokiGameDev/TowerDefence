@@ -753,7 +753,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &27967507
 MonoBehaviour:
@@ -1530,7 +1529,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &77411479
 GameObject:
@@ -2507,7 +2505,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &120827753
 GameObject:
@@ -2911,7 +2908,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 381512898}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &156581478
 MonoBehaviour:
@@ -5443,7 +5439,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1101699452}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &310112798
 MonoBehaviour:
@@ -6324,11 +6319,11 @@ RectTransform:
   - {fileID: 275991665}
   - {fileID: 1051277909}
   - {fileID: 2033084118}
-  m_Father: {fileID: 1966157816}
+  m_Father: {fileID: 715463566}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 50}
+  m_AnchoredPosition: {x: 25.00001, y: 25.00001}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &355389611
@@ -6434,7 +6429,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: SHOP
 --- !u!1 &356052875
 GameObject:
@@ -7746,7 +7740,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &409601802
 GameObject:
@@ -8360,7 +8353,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1414540706}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &430452394
 MonoBehaviour:
@@ -8578,7 +8570,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &436005420
 GameObject:
@@ -9873,7 +9864,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &510677952
 GameObject:
@@ -10142,7 +10132,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 691358697}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &541483070
 MonoBehaviour:
@@ -11036,7 +11025,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &591168960
 MonoBehaviour:
@@ -11284,7 +11272,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &592766365
 GameObject:
@@ -13503,7 +13490,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1756436171}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &695728706
 MonoBehaviour:
@@ -13896,6 +13882,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714969358}
   m_CullTransparentMesh: 1
+--- !u!1 &715463565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 715463566}
+  m_Layer: 5
+  m_Name: Menu Buttons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &715463566
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715463565}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 355389610}
+  - {fileID: 1753482866}
+  m_Father: {fileID: 1966157816}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -590, y: -270}
+  m_SizeDelta: {x: 50, y: 130}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &715695679
 GameObject:
   m_ObjectHideFlags: 0
@@ -14029,7 +14052,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &717242734
 MonoBehaviour:
@@ -14279,7 +14301,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &721546106
 GameObject:
@@ -15629,7 +15650,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1078941432}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &807938221
 MonoBehaviour:
@@ -16937,7 +16957,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 436005420}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &907560171
 MonoBehaviour:
@@ -18033,7 +18052,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoomSpeed: 10
   rotationSpeed: 10
-  movementSpeed: 10
   minZoomOut: 10
   maxZoomOut: 30
   pivot: {fileID: 807873947}
@@ -18464,7 +18482,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1242644865}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &983564158
 MonoBehaviour:
@@ -18666,7 +18683,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: Protection
 --- !u!1 &1011689174
 GameObject:
@@ -21585,7 +21601,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1155980312
 GameObject:
@@ -23622,7 +23637,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1332823947
 GameObject:
@@ -25262,7 +25276,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1432107907
 GameObject:
@@ -25859,7 +25872,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 714969358}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1450117561
 MonoBehaviour:
@@ -26474,7 +26486,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1483682562
 GameObject:
@@ -27035,7 +27046,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1912290260}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1511070732
 GameObject:
@@ -27419,7 +27429,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 508165778}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1520581150
 MonoBehaviour:
@@ -27870,9 +27879,6 @@ MonoBehaviour:
   globalLight: {fileID: 705507994}
   towerLight: {fileID: 743656212}
   gamePaused: 0
-  onModeChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &1533513305
 Transform:
   m_ObjectHideFlags: 0
@@ -29526,6 +29532,7 @@ MonoBehaviour:
   buildThingsPanel: {fileID: 1758316431}
   pauseMenuPanel: {fileID: 1938713554}
   gameOverPanel: {fileID: 1946939837}
+  menuButtons: {fileID: 715463565}
   turretDetailsObject: {fileID: 1842728865}
   playerTower: {fileID: 1050811147}
   inventoryManager: {fileID: 0}
@@ -30061,7 +30068,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 558992813}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1679545950
 MonoBehaviour:
@@ -31103,7 +31109,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1287220591}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1743125027
 MonoBehaviour:
@@ -31489,11 +31494,11 @@ RectTransform:
   - {fileID: 1255710987}
   - {fileID: 1058222546}
   - {fileID: 1557407618}
-  m_Father: {fileID: 1966157816}
+  m_Father: {fileID: 715463566}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 130}
+  m_AnchoredPosition: {x: 25.00001, y: 105.00001}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1753482867
@@ -31599,7 +31604,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: MENU
 --- !u!1 &1756436171
 GameObject:
@@ -31827,7 +31831,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1760089140
 GameObject:
@@ -32296,7 +32299,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1516177686}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1772454786
 MonoBehaviour:
@@ -33256,7 +33258,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 41198662}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1807509644
 MonoBehaviour:
@@ -33496,7 +33497,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 1133917570}
-  isMainMenu: 0
   tooltipText: 
 --- !u!114 &1821944786
 MonoBehaviour:
@@ -33713,7 +33713,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: SKIP
 --- !u!1 &1825805555
 GameObject:
@@ -34151,7 +34150,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &1842728865
 GameObject:
@@ -35246,7 +35244,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: BUILD
 --- !u!1 &1920414706
 GameObject:
@@ -36301,8 +36298,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 355389610}
-  - {fileID: 1753482866}
+  - {fileID: 715463566}
   - {fileID: 1802395606}
   - {fileID: 1938713555}
   - {fileID: 1946939838}
@@ -37559,7 +37555,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &2112908803
 GameObject:
@@ -38680,7 +38675,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowAlpha: 0.6
   scaleObject: {fileID: 0}
-  isMainMenu: 0
   tooltipText: 
 --- !u!1 &2146806953
 GameObject:

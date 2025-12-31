@@ -61,6 +61,16 @@ public class PlayerTower : MonoBehaviour, IDamagable
         return _towerHealth > 0;
     }
 
+    public void SetTowerStats(TowerData data)
+    {
+        _towerHealth = data.health;
+        _maxTowerHealth = data.maxHealth;
+        _fireRate = data.fireRate;
+        _bulletDamage = data.damage;
+        _shooterRange = data.range;
+        UpdateTowerUI();
+    }
+
     #endregion
 
     #region Upgrade Methods
@@ -70,7 +80,6 @@ public class PlayerTower : MonoBehaviour, IDamagable
         _maxTowerHealth += 10;
         _towerHealth += _maxTowerHealth;
         UpdateTowerUI();
-        DebugForCheck();
     }
 
     public void TowerFireRateUpgrade()
@@ -79,26 +88,21 @@ public class PlayerTower : MonoBehaviour, IDamagable
         {
             _fireRate -= 0.25f;
         }
-        DebugForCheck();
     }
 
     public void TowerDamageUpgrade()
     {
         _bulletDamage += 1f;
-        DebugForCheck();
     }
 
     public void TowerProductivityUpgrade()
     {
-        DebugForCheck();
-    }
-
-    public void DebugForCheck()
-    {
-        Debug.Log("Tower Upgraded");
+        _shooterRange += 1f;
     }
 
     #endregion
+
+    #region Custom Methods
 
     public void GameOver()
     {
@@ -127,4 +131,17 @@ public class PlayerTower : MonoBehaviour, IDamagable
         _towerHealth = _maxTowerHealth;
         UpdateTowerUI();
     }
+
+    public TowerData GetTowerData()
+    {
+        TowerData data = new TowerData();
+        data.health = _towerHealth;
+        data.maxHealth = _maxTowerHealth;
+        data.fireRate = _fireRate;
+        data.damage = _bulletDamage;
+        data.range = _shooterRange;
+        return data;
+    }
+
+    #endregion
 }

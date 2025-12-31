@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
                       buildThingsPanel,
                       pauseMenuPanel,
                       gameOverPanel,
+                      menuButtons,
                       turretDetailsObject;
     [SerializeField]
     private PlayerTower playerTower;
@@ -65,15 +66,11 @@ public class UIManager : MonoBehaviour
         turretDetailsObject.SetActive(false);
         pauseMenuPanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        menuButtons.SetActive(true);
     }
     #endregion
 
     #region Button Methods
-
-    public void RestartButton()
-    {
-        GameManager.Instance.RestartGame();
-    }
 
     public void UpgradeButton()
     {
@@ -105,7 +102,7 @@ public class UIManager : MonoBehaviour
         if (playerScore != null) playerScore.text = "" + GameManager.Instance._playerScore;
         if (shopCoin != null) shopCoin.text = "" + GameManager.Instance._playerScore;
         if (waveLevel != null) waveLevel.text = "" + GameManager.Instance._currentDayCount;
-        GameManager.Instance.SaveCurrentPlayerData();
+        GameManager.Instance.SaveTheGame();
     }
 
     public void UpdateTowerDetails(float towerHealth)
@@ -123,7 +120,7 @@ public class UIManager : MonoBehaviour
     {
         if (id < 0 || id >= inventoryTexts.Length) return;
         inventoryTexts[id].text = qty.ToString();
-        GameManager.Instance.SaveCurrentPlayerData();
+        GameManager.Instance.SaveTheGame();
     }
 
     public void DisplayInformation(string msg)
@@ -184,6 +181,7 @@ public class UIManager : MonoBehaviour
         skipTheDayButton.SetActive(!status);
         waveModePanel.SetActive(status);
         buildModePanel.SetActive(!status);
+        menuButtons.SetActive(!status);
     }
 
     public void GameOver()

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class PlayerData
 {
     public int towerHealth;
@@ -25,8 +26,35 @@ public class PlayerData
     }
 }
 
+[Serializable]
+public class TowerData
+{
+    public int health;
+    public int maxHealth;
+    public float fireRate;
+    public float damage;
+    public float range;
 
-[System.Serializable]
+    public TowerData(int health, int maxHealth, float fireRate, float damage, float range)
+    {
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.fireRate = fireRate;
+        this.damage = damage;
+        this.range = range;
+    }
+
+    public TowerData()
+    {
+        health = 500;
+        maxHealth = 500;
+        fireRate = 5f;
+        damage = 1f;
+        range = 10f;
+    }
+}
+
+[Serializable]
 public class ShopData
 {
     public int[] costOfTurrets;
@@ -49,4 +77,28 @@ public class ShopData
         int[] TurretUpgradeValues = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
         costOfTurretUpgrades = TurretUpgradeValues;
     }
+}
+
+[Serializable]
+public class TurretData
+{
+    public string name;
+    public float health;
+    public int damage;
+    public float fireRate;
+    public float range;
+
+    public TurretData(string name, float health, int damage, float fireRate, float range)
+    {
+        this.name = name;
+        this.health = health;
+        this.damage = damage;
+        this.fireRate = fireRate;
+        this.range = range;
+    }
+}
+
+public class TurretSaveData
+{
+     public TurretData[] turrets = new TurretData[4];
 }

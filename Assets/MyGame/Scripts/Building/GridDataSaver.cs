@@ -12,7 +12,7 @@ public class GridDataSaver : MonoBehaviour
     {
         placementSystem.gridData = new GridData();
         placedObjectsData = Load();
-        GameManager.Instance.LoadTheGridData();
+        LoadTheGridData();
     }
 
     public void LoadTheGridData()

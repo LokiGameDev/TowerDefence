@@ -4,7 +4,6 @@ using UnityEngine;
 
 public static class PlayerDataSaver
 {
-
     public static PlayerData LoadPlayerData()
     {
         string path = PlayerPrefs.GetString("CurrentGamePath") + "/playerData1.dat";
@@ -56,7 +55,6 @@ public static class PlayerDataSaver
         }
     }
 
-
     public static void SavePlayerData(PlayerData data)
     {
         string path = PlayerPrefs.GetString("CurrentGamePath") + "/playerData1.dat";
@@ -96,5 +94,26 @@ public static class PlayerDataSaver
 
         string json = File.ReadAllText(PlayerPrefs.GetString("CurrentGamePath") + "/shopData1.json");
         return JsonUtility.FromJson<ShopData>(json);
+    }
+
+    public static void SaveTowerData(TowerData towerData)
+    {
+        string json = JsonUtility.ToJson(towerData);
+        File.WriteAllText(PlayerPrefs.GetString("CurrentGamePath") + "/towerData.json", json);
+        Debug.Log("Shop data saved");
+    }
+
+    public static TowerData LoadTowerData()
+    {
+        if (!File.Exists(PlayerPrefs.GetString("CurrentGamePath") + "/towerData.json"))
+        {
+            Debug.Log("Save not found. Creating new data.");
+            TowerData towerData = new TowerData();
+            SaveTowerData(towerData);
+            return towerData;
+        }
+
+        string json = File.ReadAllText(PlayerPrefs.GetString("CurrentGamePath") + "/towerData.json");
+        return JsonUtility.FromJson<TowerData>(json);
     }
 }

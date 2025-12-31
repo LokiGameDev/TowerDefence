@@ -7,7 +7,6 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     private float   zoomSpeed = 10f,
                     rotationSpeed = 5f,
-                    movementSpeed = 10f,
                     minZoomOut = 10f,
                     maxZoomOut = 25f;
 
@@ -18,10 +17,6 @@ public class CameraMovement : MonoBehaviour
 
     #endregion
 
-    void Start()
-    {
-        GameManager.Instance.onModeChange.AddListener(SetPivotToOrigin);
-    }
     void Update()
     {
         if(GameManager.Instance.MenuPanelStatus()) return;
@@ -41,11 +36,6 @@ public class CameraMovement : MonoBehaviour
             CameraPivotRotation();
         }
 
-        // if((!GameManager.Instance.IsWaveGoing() || !GameManager.Instance.gamePaused) && !GameManager.Instance.isBuildMode)
-        // {
-        //     CameraAxisMovement();
-        // }
-
     }
 
     private void CameraPivotRotation()
@@ -64,19 +54,4 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    private void CameraAxisMovement()
-    {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 direction = transform.right * horizontal + transform.forward * vertical;
-        direction.y = 0;
-
-        pivot.position += direction.normalized * movementSpeed * Time.deltaTime;
-    }
-
-    public void SetPivotToOrigin()
-    {
-        pivot.position = new Vector3(0,0,0);
-    }
 }
