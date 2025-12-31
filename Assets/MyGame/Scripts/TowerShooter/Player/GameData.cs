@@ -49,7 +49,7 @@ public class TowerData
         health = 500;
         maxHealth = 500;
         fireRate = 5f;
-        damage = 1f;
+        damage = 10f;
         range = 10f;
     }
 }

@@ -9,6 +9,7 @@ public class SpawnManager : MonoBehaviour
     public bool _canSpawnEnemy;
     private int _enemyCount;
     private float _spawnRadius;
+    public bool _waveInProgress;
 
     #endregion
 
@@ -16,6 +17,7 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
+        _waveInProgress = false;
         _canSpawnEnemy = true;
         _spawnRadius = 35;
     }
@@ -26,6 +28,11 @@ public class SpawnManager : MonoBehaviour
 
     public void StartTheSpawn(int level)
     {
+        if (_waveInProgress)
+        {
+            return;
+        }
+        _waveInProgress = true;
         GameManager.Instance.willEnemySpawn = true;
         _enemyCount = level*2;
         SpawnWave();
@@ -61,6 +68,15 @@ public class SpawnManager : MonoBehaviour
     {
         _enemyCount = 0;
         GameManager.Instance.willEnemySpawn = false;
+        _waveInProgress = false;
+        StopAllCoroutines();
+    }
+
+    public void StopSpawning()
+    {
+        _enemyCount = 0;
+        GameManager.Instance.willEnemySpawn = false;
+        _waveInProgress = false;
         StopAllCoroutines();
     }
 
@@ -105,6 +121,8 @@ public class SpawnManager : MonoBehaviour
         if (_enemyCount <= 0)
         {
             GameManager.Instance.willEnemySpawn = false;
+            _waveInProgress = false;
+            _canSpawnEnemy = true;
         }
         yield return new WaitForSeconds(1);
         _canSpawnEnemy = true;

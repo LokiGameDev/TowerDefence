@@ -17,8 +17,8 @@ public class DisplayTurretDetails : MonoBehaviour
     private PlayerTurret currentTurret;
 
     private float duration = 1;
-    private float fromY = -100,
-                  toY = 0;
+    private float fromY = -120,
+                  toY = 80;
 
     public void FillTheTurretDetails(PlayerTurret turret)
     {

@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
         if (_enemyCount == 0 && !willEnemySpawn)
         {
             AudioManager.Instance.PlayTheAudioClip(AudioType.WaveCleared);
+            spawnManager._waveInProgress = false;
             WaveCleared();
         }
         UIManager.Instance.UpdateUIElements();
