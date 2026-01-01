@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
         inputManager.GetComponent<InputManager>().enabled = true;
         StartCoroutine(ProtectionDecay());
         UnlockPurchaseItemsDayCheck();
+        CheckForInstruction();
     }
 
     void Update()
@@ -293,6 +294,16 @@ public class GameManager : MonoBehaviour
     public bool MenuPanelStatus()
     {
         return shopManager.ShopStatus();
+    }
+
+    public void CheckForInstruction()
+    {
+        if(!PlayerPrefs.HasKey("ShowInstruction") || _savedDayCount == 0)
+        {
+            Debug.Log(PlayerPrefs.HasKey("ShowInstruction"));
+            UIManager.Instance.ShowInstructionPanel();
+            PlayerPrefs.SetInt("ShowInstruction", 0);
+        }
     }
 
     #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
@@ -45,6 +46,7 @@ public class UIManager : MonoBehaviour
                       pauseMenuPanel,
                       gameOverPanel,
                       menuButtons,
+                      instructionPanel,
                       turretDetailsObject;
     [SerializeField]
     private PlayerTower playerTower;
@@ -135,6 +137,18 @@ public class UIManager : MonoBehaviour
         {
             infoDisplay.text = msg;
         }
+    }
+
+    public void ShowInstructionPanel()
+    {
+        instructionPanel.SetActive(true);
+        StartCoroutine(CooldownDeactivate(instructionPanel, 5f));
+    }
+
+    IEnumerator CooldownDeactivate(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(false);
     }
 
     #endregion

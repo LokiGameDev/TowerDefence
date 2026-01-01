@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.IO;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MenuManager: MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class MenuManager: MonoBehaviour
     public TMP_Text infoDisplay;
     private int newGameIndex;
     private string saveGamePath;
+
+    public Toggle toggleFullscreen;
+    public Slider volumeSlider;
     #endregion
 
     #region Startup and Panel Functions
@@ -59,7 +63,42 @@ public class MenuManager: MonoBehaviour
 
     private void SettingsSetup()
     {
-        
+        if (PlayerPrefs.HasKey("Fullscreen"))
+        {
+            bool isFullscreen = PlayerPrefs.GetInt("Fullscreen") == 1 ? true : false;
+            Screen.fullScreen = isFullscreen;
+        }
+        if (PlayerPrefs.HasKey("Volume"))
+        {
+            float volume = PlayerPrefs.GetFloat("Volume");
+            AudioListener.volume = volume;
+        }
+    }
+
+    #endregion
+
+    #region Settings Functions
+
+    public void FullscreenToggle()
+    {
+        SetFullscreen(toggleFullscreen.isOn);
+    }
+
+    public void VolumeChanged()
+    {
+        SetVolume(volumeSlider.value);
+    }
+
+    public void SetFullscreen(bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
+        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+    }
+
+    public void SetVolume(float volume)
+    {
+        AudioListener.volume = volume;
+        PlayerPrefs.SetFloat("Volume", volume);
     }
 
     #endregion
